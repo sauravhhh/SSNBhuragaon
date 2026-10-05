@@ -1,5 +1,5 @@
 /* SSN Bhuragaon service worker — network-first pages, cache-first assets */
-const CACHE = "ssn-bhuragaon-v1";
+const CACHE = "ssn-bhuragaon-v2";
 const CORE = ["./", "index.html", "styles.css", "manifest.json", "images/logo.png", "images/icon-192.png", "images/icon-512.png"];
 
 self.addEventListener("install", (e) => {
