@@ -65,7 +65,7 @@ nav a.active{background:var(--cream);}
   nav a:hover{background:rgba(255,255,255,.1);}
   nav a.active{background:rgba(201,162,39,.18);color:var(--gold-light);}
   #menuBtn{display:block;}
-  .hname .en{font-size:15px;}
+  .hname .en{font-size:15px;white-space:normal;line-height:1.35;}
 }
 
 /* hero (home) */
