@@ -119,8 +119,19 @@
 </footer>
 
 <script>
-document.getElementById("menuBtn").onclick = function(){document.getElementById("nav").classList.toggle("open");this.classList.toggle("open");};
-document.querySelectorAll("#nav a").forEach(a => a.onclick = () => document.getElementById("nav").classList.remove("open"));
+var menuBtn=document.getElementById("menuBtn"),nav=document.getElementById("nav");
+menuBtn.onclick=function(){
+  menuBtn.classList.add("anim");
+  var open=nav.classList.toggle("open");
+  menuBtn.classList.toggle("open",open);
+  if(open){
+    var r=menuBtn.getBoundingClientRect();
+    nav.style.setProperty("--cx",(r.left+r.width/2)+"px");
+    nav.style.setProperty("--cy",(r.top+r.height/2)+"px");
+    document.body.style.overflow="hidden";
+  }else{document.body.style.overflow="";}
+};
+nav.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){nav.classList.remove("open");menuBtn.classList.remove("open");document.body.style.overflow="";});});
 </script>
 <script>
 if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}
