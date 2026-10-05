@@ -12,11 +12,17 @@
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<header class="topbar">
-  <div class="wrap">
-    <a class="brand" href="index.html"><img src="images/logo.png" alt="School badge"><span><b>Shankardev Shishu Niketan</b><small>Bhuragaon, Morigaon (Assam)</small></span></a>
-    <button class="menu-btn" id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
-    <nav class="nav" id="nav">
+<header>
+  <div class="hbar">
+    <a class="brand" href="index.html">
+      <img src="images/logo.png" alt="Shankardev Shishu Niketan emblem">
+      <span class="hname">
+        <span class="en">Shankardev Shishu Niketan, Bhuragaon</span>
+        <span class="as">শংকৰদেৱ শিশু নিকেতন, ভূৰাগাঁও</span>
+      </span>
+    </a>
+    <button id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+    <nav id="nav">
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
       <a href="academics.html">Academics</a>
@@ -28,44 +34,47 @@
   </div>
 </header>
 
-<section class="hero-lite">
-  <div class="wrap">
-    <h1>Notices &amp; Updates</h1>
-    <p>Announcements, exam schedules and school news — newest first.</p>
-  </div>
-</section>
+<div class="page-hero">
+  <h1>Notices &amp; Updates</h1>
+  <div class="as">জাননী</div>
+  <p class="sub">Announcements, exam schedules and school news — newest first.</p>
+</div>
 
-<section class="section">
+<section>
   <div class="wrap">
     <div id="noticeList"><p style="color:var(--muted)">Loading notices…</p></div>
   </div>
 </section>
 
 <footer>
-  <div class="wrap fgrid">
+  <div class="wrap">
     <div>
-      <b>Shankardev Shishu Niketan, Bhuragaon</b>
-      <p style="margin-top:10px;">An Assamese-medium school (Ankur to Class 10) run by Shishu Shiksha Samiti, Assam, affiliated with Vidya Bharati.<br>
-      <span class="as">শংকৰদেৱ শিশু নিকেতন, ভূৰাগাঁও</span></p>
+      <h4>Shankardev Shishu Niketan, Bhuragaon</h4>
+      <p><span class="as">শংকৰদেৱ শিশু নিকেতন, ভূৰাগাঁও</span><br>
+      Estd. 31 January 2004 · Bhuragaon, Morigaon, Assam</p>
     </div>
     <div>
-      <b>Quick Links</b>
+      <h4>Explore</h4>
       <ul>
-        <li><a href="about.html">About the School</a></li>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="academics.html">Academics</a></li>
         <li><a href="admissions.html">Admissions</a></li>
         <li><a href="notices.html">Notices</a></li>
-        <li><a href="contact.html">Contact</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
       </ul>
     </div>
     <div>
-      <b>Organisation</b>
+      <h4>Organisation</h4>
       <ul>
         <li><a href="https://sssassam.com/" target="_blank" rel="noopener">Shishu Shiksha Samiti, Assam</a></li>
         <li><a href="https://vidyabharti.net/" target="_blank" rel="noopener">Vidya Bharati</a></li>
       </ul>
     </div>
   </div>
-  <div class="fbot">© 2026 Shankardev Shishu Niketan, Bhuragaon.</div>
+  <div class="fbot">
+    <span>© 2026 Shankardev Shishu Niketan, Bhuragaon. All rights reserved.</span>
+  </div>
 </footer>
 
 <script>
