@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Academics — Shankardev Shishu Niketan, Bhuragaon</title>
+<meta name="description" content="Academics at Shankardev Shishu Niketan, Bhuragaon — Ankur to Class 10, Assamese medium, SEBA-based curriculum with yoga, music, Sanskrit and Vedic maths.">
+<link rel="icon" href="images/logo.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#16345f">
+<link rel="apple-touch-icon" href="images/icon-apple-touch.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="hbar">
+    <a class="brand" href="index.html">
+      <img src="images/logo.png" alt="Shankardev Shishu Niketan emblem">
+      <span class="hname">
+        <span class="en">Shankardev Shishu Niketan, Bhuragaon</span>
+        <span class="as">শংকৰদেৱ শিশু নিকেতন, ভূৰাগাঁও</span>
+      </span>
+    </a>
+    <button id="menuBtn" aria-label="Menu">☰</button>
+    <nav id="nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="academics.html" class="active">Academics</a>
+      <a href="admissions.html">Admissions</a>
+      <a href="facilities.html">Facilities</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-hero">
+  <h1>Academics</h1>
+  <div class="as">শৈক্ষিক</div>
+  <p class="sub">Twelve classes from Ankur to Class 10, in the Assamese medium.</p>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="kicker">Curriculum</div>
+    <h2 class="stitle">Learning with values</h2>
+    <p class="lede">The Niketan follows the Shishu Shiksha Samiti curriculum with the SEBA pattern at the secondary level — strong academics woven together with Indian culture and character building.</p>
+    <div class="cols">
+      <div class="card">
+        <h3>What we teach</h3>
+        <ul>
+          <li><b>Core subjects</b> as per the Samiti / SEBA-based syllabus</li>
+          <li><b>Moral education</b> — stories of heroes, honesty, personal hygiene</li>
+          <li><b>Physical education &amp; yoga</b></li>
+          <li><b>Music</b> and <b>Sanskrit</b></li>
+          <li><b>Vedic mathematics</b></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Beyond the classroom</h3>
+        <ul>
+          <li>School magazine <b><span class="as">প্ৰান্তিক</span> (Prantik)</b> and the Vidya Bharati Sangbad newsletter</li>
+          <li>Cultural programmes on Indian festivals and traditions</li>
+          <li>Morning prayer with shlokas and patriotic songs</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <div class="kicker">Uniform</div>
+    <h2 class="stitle">Dress code</h2>
+    <div class="cols">
+      <div class="card">
+        <h3>Boys</h3>
+        <p>White shirt with navy-blue shorts or long pants and black shoes. On Thursdays and Saturdays: all-white uniform with white shoes. A red sweater is permitted in winter.</p>
+      </div>
+      <div class="card">
+        <h3>Girls</h3>
+        <p>Navy-blue skirt or salwar-kameez with white dupatta and black shoes. On Thursdays and Sundays: all-white salwar-kameez with dupatta and white shoes. A red sweater is permitted in winter.</p>
+      </div>
+    </div>
+    <p style="margin-top:18px;color:var(--muted);font-size:14px;">The school badge, ID card and name-belt are part of the uniform — keeping simplicity and discipline at the heart of everyday school life.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <h4>Shankardev Shishu Niketan, Bhuragaon</h4>
+      <p><span class="as">শংকৰদেৱ শিশু নিকেতন, ভূৰাগাঁও</span><br>
+      <span class="as">॥ স্বয়মেৱ মৃগেন্দ্ৰতা ॥</span> — be strong through one's own qualities and deeds.<br>
+      Estd. 31 January 2004 · Bhuragaon, Morigaon, Assam</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="academics.html">Academics</a></li>
+        <li><a href="admissions.html">Admissions</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Organisation</h4>
+      <ul>
+        <li><a href="https://sssassam.com/" target="_blank" rel="noopener">Shishu Shiksha Samiti, Assam</a></li>
+        <li><a href="https://as.wikipedia.org/wiki/শিশু_শিক্ষা_সমিতি,_অসম" target="_blank" rel="noopener">About the Samiti (Assamese)</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="fbot">
+    <span>© 2026 Shankardev Shishu Niketan, Bhuragaon. All rights reserved.</span>
+  </div>
+</footer>
+
+<script>
+document.getElementById("menuBtn").onclick = () => document.getElementById("nav").classList.toggle("open");
+document.querySelectorAll("#nav a").forEach(a => a.onclick = () => document.getElementById("nav").classList.remove("open"));
+</script>
+<script>
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}
+</script>
+</body>
+</html>
