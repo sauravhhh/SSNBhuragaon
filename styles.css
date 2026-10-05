@@ -110,6 +110,13 @@ h2.stitle{font-size:clamp(26px,4vw,36px);color:var(--navy);margin-bottom:6px;}
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start;}
 @media(max-width:760px){.cols{grid-template-columns:1fr;}}
 .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px;}
+
+/* media subsection */
+.media-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-top:22px;}
+.media-card{margin:0;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+.media-card img{display:block;width:100%;height:auto;}
+.media-card figcaption{padding:18px 20px;font-size:14px;color:var(--muted);line-height:1.65;}
+.media-card figcaption b{color:var(--navy);}
 section.alt .card{box-shadow:0 4px 18px rgba(22,52,95,.06);}
 .card h3{font-size:19px;color:var(--navy);margin-bottom:10px;}
 .card p,.card li{font-size:15px;color:#3a3f47;}
