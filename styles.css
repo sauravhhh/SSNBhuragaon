@@ -164,6 +164,7 @@ footer li{margin-bottom:7px;}
 .pmsg{display:grid;grid-template-columns:120px 1fr;gap:28px;align-items:start;margin-top:8px;}
 @media(max-width:640px){.pmsg{grid-template-columns:1fr;}}
 .pmsg .avatar{width:110px;height:110px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:40px;}
+.pmsg .pphoto{width:150px;height:180px;object-fit:cover;object-position:top;border-radius:12px;border:1px solid var(--line);}
 .pmsg blockquote{font-family:Georgia,serif;font-size:17px;line-height:1.75;color:var(--navy);font-style:italic;}
 .pmsg .psign{margin-top:14px;font-size:14px;font-style:normal;font-family:inherit;}
 .pmsg .psign b{color:var(--navy);}
