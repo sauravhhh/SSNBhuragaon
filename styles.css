@@ -117,6 +117,12 @@ h2.stitle{font-size:clamp(26px,4vw,36px);color:var(--navy);margin-bottom:6px;}
 .media-card img{display:block;width:100%;height:auto;}
 .media-card figcaption{padding:18px 20px;font-size:14px;color:var(--muted);line-height:1.65;}
 .media-card figcaption b{color:var(--navy);}
+
+/* gallery subsection */
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:22px;}
+.gallery-grid figure{margin:0;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;}
+.gallery-grid img{display:block;width:100%;height:180px;object-fit:cover;}
+.gallery-grid figcaption{padding:12px 14px;font-size:13px;color:var(--muted);line-height:1.5;}
 section.alt .card{box-shadow:0 4px 18px rgba(22,52,95,.06);}
 .card h3{font-size:19px;color:var(--navy);margin-bottom:10px;}
 .card p,.card li{font-size:15px;color:#3a3f47;}
