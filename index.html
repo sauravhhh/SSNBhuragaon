@@ -170,6 +170,30 @@ menuBtn.onclick=function(){
   }else{document.body.style.overflow="";}
 };
 nav.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){nav.classList.remove("open");menuBtn.classList.remove("open");document.body.style.overflow="";});});
+/* count-up animation for the stats numbers, triggered when scrolled into view */
+(function(){
+  var nums=document.querySelectorAll(".stat b");
+  if(!nums.length||!("IntersectionObserver" in window))return;
+  var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function countUp(el){
+    var target=parseInt(el.textContent.replace(/\D/g,""),10);
+    if(isNaN(target))return;
+    if(reduce){el.textContent=target;return;}
+    var dur=1500,start=null;
+    function tick(ts){
+      if(!start)start=ts;
+      var p=Math.min((ts-start)/dur,1),e=1-Math.pow(1-p,3);
+      el.textContent=Math.round(target*e);
+      if(p<1)requestAnimationFrame(tick);else el.textContent=target;
+    }
+    requestAnimationFrame(tick);
+  }
+  var fired=false,box=document.querySelector(".stats");
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(en){if(en.isIntersecting&&!fired){fired=true;nums.forEach(countUp);io.disconnect();}});
+  },{threshold:0.35});
+  if(box)io.observe(box);
+})();
 </script>
 <script>
 if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}
