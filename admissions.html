@@ -22,7 +22,7 @@
         <span class="as">শংকৰদেৱ শিশু নিকেতন, ভূৰাগাঁও</span>
       </span>
     </a>
-    <button id="menuBtn" aria-label="Menu">☰</button>
+    <button id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
     <nav id="nav">
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
@@ -106,7 +106,7 @@
 </footer>
 
 <script>
-document.getElementById("menuBtn").onclick = () => document.getElementById("nav").classList.toggle("open");
+document.getElementById("menuBtn").onclick = function(){document.getElementById("nav").classList.toggle("open");this.classList.toggle("open");};
 document.querySelectorAll("#nav a").forEach(a => a.onclick = () => document.getElementById("nav").classList.remove("open"));
 </script>
 <script>
