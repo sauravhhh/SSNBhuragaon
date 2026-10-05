@@ -2,117 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Facilities — Shankardev Shishu Niketan, Bhuragaon</title>
-<meta name="description" content="Campus facilities at Shankardev Shishu Niketan, Bhuragaon — library, playground, safe rural campus in central Bhuragaon.">
-<link rel="icon" href="images/logo.png">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#16345f">
-<link rel="apple-touch-icon" href="images/icon-apple-touch.png">
-<link rel="stylesheet" href="styles.css">
+<meta name="description" content="Facilities are now part of the Academics &amp; Facilities page.">
+<meta http-equiv="refresh" content="0; url=academics.html">
+<link rel="canonical" href="academics.html">
 </head>
-<body>
-
-<header>
-  <div class="hbar">
-    <a class="brand" href="index.html">
-      <img src="images/logo.png" alt="Shankardev Shishu Niketan emblem">
-      <span class="hname">
-        <span class="en">Shankardev Shishu Niketan, Bhuragaon</span>
-        <span class="as">শংকৰদেৱ শিশু নিকেতন, ভূৰাগাঁও</span>
-      </span>
-    </a>
-    <button id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
-    <nav id="nav">
-      <a href="index.html">Home</a>
-      <a href="about.html">About</a>
-      <a href="academics.html">Academics</a>
-      <a href="admissions.html">Admissions</a>
-      <a href="facilities.html" class="active">Facilities</a>
-      <a href="notices.html">Notices</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </div>
-</header>
-
-<div class="page-hero">
-  <h1>Facilities</h1>
-  <div class="as">সা-সুবিধা</div>
-  <p class="sub">A simple, safe rural campus built for learning.</p>
-</div>
-
-<section>
-  <div class="wrap">
-    <div class="kicker">Campus</div>
-    <h2 class="stitle">What the campus offers</h2>
-    <div class="cols">
-      <div class="card">
-        <h3>On campus</h3>
-        <ul>
-          <li>Library with 200–500 books</li>
-          <li>Playground for sports and morning assembly</li>
-          <li>Electricity and hand-pump drinking water</li>
-          <li>Separate toilets for boys and girls</li>
-          <li>Barbed-wire fenced, secure boundary</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>A central location</h3>
-        <p>The Niketan sits in the heart of Bhuragaon, near the Barduba Tup Shiva Temple — bounded by Bhuragaon College, the police station and the supplementary health centre. Children from every corner of the town reach the campus easily.</p>
-        <a class="more" href="contact.html">See the map →</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="wrap">
-    <div>
-      <h4>Shankardev Shishu Niketan, Bhuragaon</h4>
-      <p><span class="as">শংকৰদেৱ শিশু নিকেতন, ভূৰাগাঁও</span><br>
-      Estd. 31 January 2004 · Bhuragaon, Morigaon, Assam</p>
-    </div>
-    <div>
-      <h4>Explore</h4>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="academics.html">Academics</a></li>
-        <li><a href="admissions.html">Admissions</a></li>
-        <li><a href="notices.html">Notices</a></li>
-        <li><a href="contact.html">Contact Us</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4>Organisation</h4>
-      <ul>
-        <li><a href="https://sssassam.com/" target="_blank" rel="noopener">Shishu Shiksha Samiti, Assam</a></li>
-        <li><a href="https://vidyabharti.net/" target="_blank" rel="noopener">Vidya Bharati</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="fbot">
-    <span>© 2026 Shankardev Shishu Niketan, Bhuragaon. All rights reserved.</span>
-  </div>
-</footer>
-
-<script>
-var menuBtn=document.getElementById("menuBtn"),nav=document.getElementById("nav");
-menuBtn.onclick=function(){
-  menuBtn.classList.add("anim");
-  var open=nav.classList.toggle("open");
-  menuBtn.classList.toggle("open",open);
-  if(open){
-    var r=menuBtn.getBoundingClientRect();
-    nav.style.setProperty("--cx",(r.left+r.width/2)+"px");
-    nav.style.setProperty("--cy",(r.top+r.height/2)+"px");
-    document.body.style.overflow="hidden";
-  }else{document.body.style.overflow="";}
-};
-nav.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){nav.classList.remove("open");menuBtn.classList.remove("open");document.body.style.overflow="";});});
-</script>
-<script>
-if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}
-</script>
+<body style="font-family:sans-serif;padding:40px 20px;text-align:center;color:#16345f;">
+<p>Facilities have moved to the <a href="academics.html">Academics &amp; Facilities</a> page. Redirecting…</p>
+<script>location.replace("academics.html");</script>
 </body>
 </html>
