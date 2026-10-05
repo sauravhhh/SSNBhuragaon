@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admissions — Shankardev Shishu Niketan, Bhuragaon</title>
+<meta name="description" content="Admissions at Shankardev Shishu Niketan, Bhuragaon — visit the school office near Barduba Tup Shiva Temple for admission from Ankur (KG) to Class 10.">
+<link rel="icon" href="images/logo.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#16345f">
+<link rel="apple-touch-icon" href="images/icon-apple-touch.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="hbar">
+    <a class="brand" href="index.html">
+      <img src="images/logo.png" alt="Shankardev Shishu Niketan emblem">
+      <span class="hname">
+        <span class="en">Shankardev Shishu Niketan, Bhuragaon</span>
+        <span class="as">শংকৰদেৱ শিশু নিকেতন, ভূৰাগাঁও</span>
+      </span>
+    </a>
+    <button id="menuBtn" aria-label="Menu">☰</button>
+    <nav id="nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="academics.html">Academics</a>
+      <a href="admissions.html" class="active">Admissions</a>
+      <a href="facilities.html">Facilities</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-hero">
+  <h1>Admissions</h1>
+  <div class="as">নামভৰ্তি</div>
+  <p class="sub">Join the Niketan family — from Ankur (KG) to Class 10.</p>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="kicker">How to Apply</div>
+    <h2 class="stitle">A simple, personal process</h2>
+    <p class="lede">Admissions are handled directly at the school office. Parents and guardians are welcome to visit the campus near the Barduba Tup Shiva Temple, Bhuragaon.</p>
+    <div class="cols">
+      <div class="card">
+        <h3>Steps</h3>
+        <ul>
+          <li>Visit the school office during working hours</li>
+          <li>Carry the child's birth certificate and previous report card (if applicable)</li>
+          <li>Meet our teachers to understand the Niketan's values and daily routine</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Why families choose us</h3>
+        <ul>
+          <li>Value-based education in the mother tongue</li>
+          <li>Small, caring rural campus in central Bhuragaon</li>
+          <li>Experienced acharyas — 22 teachers for about 565 students</li>
+          <li>Part of the 550+ strong Shishu Shiksha Samiti, Assam family</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-band">
+  <h2 class="serif">Come, see the campus</h2>
+  <p>The best way to know the Niketan is to walk through it. Find us beside the Shiva temple in the heart of Bhuragaon.</p>
+  <a class="btn gold" href="contact.html">Find Us</a>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <h4>Shankardev Shishu Niketan, Bhuragaon</h4>
+      <p><span class="as">শংকৰদেৱ শিশু নিকেতন, ভূৰাগাঁও</span><br>
+      <span class="as">॥ স্বয়মেৱ মৃগেন্দ্ৰতা ॥</span> — be strong through one's own qualities and deeds.<br>
+      Estd. 31 January 2004 · Bhuragaon, Morigaon, Assam</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="academics.html">Academics</a></li>
+        <li><a href="admissions.html">Admissions</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Organisation</h4>
+      <ul>
+        <li><a href="https://sssassam.com/" target="_blank" rel="noopener">Shishu Shiksha Samiti, Assam</a></li>
+        <li><a href="https://as.wikipedia.org/wiki/শিশু_শিক্ষা_সমিতি,_অসম" target="_blank" rel="noopener">About the Samiti (Assamese)</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="fbot">
+    <span>© 2026 Shankardev Shishu Niketan, Bhuragaon. All rights reserved.</span>
+  </div>
+</footer>
+
+<script>
+document.getElementById("menuBtn").onclick = () => document.getElementById("nav").classList.toggle("open");
+document.querySelectorAll("#nav a").forEach(a => a.onclick = () => document.getElementById("nav").classList.remove("open"));
+</script>
+<script>
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}
+</script>
+</body>
+</html>
