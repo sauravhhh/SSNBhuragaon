@@ -134,12 +134,9 @@
       return;
     }
     btn.disabled=true; btn.textContent="Sending…"; msg.className="fmsg";
-    var data={};
-    new FormData(form).forEach(function(v,k){ data[k]=v; });
     fetch("https://api.web3forms.com/submit",{
       method:"POST",
-      headers:{"Content-Type":"application/json","Accept":"application/json"},
-      body:JSON.stringify(data)
+      body:new FormData(form)
     }).then(function(r){ return r.json(); }).then(function(j){
       if(j.success){
         show("Enquiry sent successfully. Our admission adviser will contact you shortly.",true);
