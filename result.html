@@ -103,7 +103,7 @@ td.m,th.m{text-align:center;}
         <div class="signcap">Principal<br><span>Shankardev Shishu Niketan, Bhuragaon</span></div>
       </div>
     </div>
-    <button class="btn" id="rdl" type="button" style="margin-top:10px">Download Result</button>
+    <button class="btn" id="rdl" type="button" style="margin-top:10px">Download PDF</button>
     <button class="btn ghost" id="rback" type="button">Check another result</button>
   </div>
   <p class="note">For any correction, contact the school office.</p>
@@ -269,122 +269,135 @@ document.getElementById("rback").addEventListener("click", () => {
 
 /* ---------- download result as image ---------- */
 
-function drawStamp(x, cx, cy, R) {
-  x.save();
-  x.translate(cx, cy); x.rotate(-0.14); x.translate(-cx, -cy);
-  const blue = "rgba(26,86,168,.88)";
-  x.strokeStyle = blue; x.fillStyle = blue;
-  x.lineWidth = 3;
-  x.beginPath(); x.arc(cx, cy, R, 0, Math.PI*2); x.stroke();
-  x.lineWidth = 1.5;
-  x.beginPath(); x.arc(cx, cy, R-8, 0, Math.PI*2); x.stroke();
-  x.textAlign = "center"; x.textBaseline = "middle";
-  const top = "SHANKARDEV SHISHU NIKETAN", bot = "BHURAGAON \u2022 MORIGAON", rT = R-20;
-  x.font = "bold 15px sans-serif";
-  const spreadT = Math.PI*0.95;
-  for (let i=0;i<top.length;i++){
-    const a = -Math.PI/2 + (i/(top.length-1)-0.5)*spreadT;
-    x.save(); x.translate(cx+rT*Math.cos(a), cy+rT*Math.sin(a)); x.rotate(a+Math.PI/2); x.fillText(top[i],0,0); x.restore();
-  }
-  const spreadB = Math.PI*0.7;
-  for (let i=0;i<bot.length;i++){
-    const a = Math.PI/2 + (0.5-i/(bot.length-1))*spreadB;
-    x.save(); x.translate(cx+rT*Math.cos(a), cy+rT*Math.sin(a)); x.rotate(a-Math.PI/2); x.fillText(bot[i],0,0); x.restore();
-  }
-  x.font = "bold 16px sans-serif";
-  x.fillText("ESTD 2004", cx, cy-3);
-  x.font = "15px sans-serif";
-  x.fillText("\u2605", cx, cy+20);
-  x.restore();
-}
-document.getElementById("rdl").addEventListener("click", () => {
+function pdfMarksheet() {
   if (!curCls || !curSt) return;
-  const W = 1000, pad = 60, rowH = 46;
-  const n = curCls.subjects.length;
-  const H = pad + 120 + 26 + 70 + 40 + n * rowH + 150 + 230;
-  const cv = document.createElement("canvas");
-  cv.width = W; cv.height = H;
-  const x = cv.getContext("2d");
-  const navy = "#16345f", muted = "#5c6470", ink = "#1c1c1c";
-  x.fillStyle = "#ffffff"; x.fillRect(0, 0, W, H);
-  x.textAlign = "center";
-  x.fillStyle = navy; x.font = "bold 34px Georgia,serif";
-  x.fillText("Shankardev Shishu Niketan, Bhuragaon", W / 2, pad + 34);
-  x.fillStyle = muted; x.font = "20px sans-serif";
-  x.fillText("\u09b6\u0982\u0995\u09f0\u09a6\u09c7\u09f1 \u09b6\u09bf\u09b6\u09c1 \u09a8\u09bf\u0995\u09c7\u09a4\u09a8, \u09ad\u09c2\u09f0\u09be\u0997\u09be\u0993", W / 2, pad + 68);
-  x.font = "17px sans-serif";
-  x.fillText("Annual Examination 2026  \u00b7  Marksheet", W / 2, pad + 100);
-  let y = pad + 132;
-  x.strokeStyle = "#e9e2d3"; x.lineWidth = 2;
-  x.beginPath(); x.moveTo(pad, y); x.lineTo(W - pad, y); x.stroke();
-  y += 44;
-  x.textAlign = "left"; x.fillStyle = ink; x.font = "19px sans-serif";
-  x.fillText("Name:  " + curSt.name, pad, y);
-  x.textAlign = "right";
-  x.fillText(curCls.name + "   \u00b7   Roll No. " + curSt.roll, W - pad, y);
-  y += 40;
-  // table header
-  x.textAlign = "left"; x.fillStyle = muted; x.font = "bold 14px sans-serif";
-  x.fillText("SUBJECT", pad, y);
-  x.textAlign = "center";
-  x.fillText("MARKS", W - 220, y);
-  x.fillText("STATUS", W - pad - 40, y);
-  y += 8;
-  x.strokeStyle = navy; x.lineWidth = 2;
-  x.beginPath(); x.moveTo(pad, y); x.lineTo(W - pad, y); x.stroke();
-  y += 30;
-  let total = 0, failed = false;
-  x.font = "18px sans-serif";
+  const P = [];
+  const navy = [0.09,0.20,0.37], ink = [0.10,0.10,0.10], muted = [0.38,0.41,0.46],
+        green = [0.10,0.48,0.20], red = [0.66,0.18,0.18], sblue = [0.10,0.34,0.66],
+        rule = [0.78,0.76,0.70], hfill = [0.949,0.945,0.929];
+  const Y = v => 842 - v;
+  const esc = t => String(t).replace(/\\/g,"\\\\").replace(/\(/g,"\\(").replace(/\)/g,"\\)").replace(/[^\x20-\x7e]/g,"?");
+  function T(x, y, str, font, size, c, rot) {
+    rot = rot || 0;
+    const cs = Math.cos(rot), sn = Math.sin(rot);
+    P.push(c[0].toFixed(3)+" "+c[1].toFixed(3)+" "+c[2].toFixed(3)+" rg");
+    P.push("BT /"+font+" "+size+" Tf "+cs.toFixed(4)+" "+sn.toFixed(4)+" "+(-sn).toFixed(4)+" "+cs.toFixed(4)+" "+x.toFixed(2)+" "+Y(y).toFixed(2)+" Tm ("+esc(str)+") Tj ET");
+  }
+  const wEst = (str, size, bold) => String(str).length * size * (bold ? 0.60 : 0.55);
+  const TC = (cx, y, str, font, size, c) => T(cx - wEst(str, size, font === "F2") / 2, y, str, font, size, c);
+  function line(x1, y1, x2, y2, w, c) {
+    P.push(c[0].toFixed(3)+" "+c[1].toFixed(3)+" "+c[2].toFixed(3)+" RG "+w+" w "+x1.toFixed(2)+" "+Y(y1).toFixed(2)+" m "+x2.toFixed(2)+" "+Y(y2).toFixed(2)+" l S");
+  }
+  function fillRect(x, y, w, h, c) {
+    P.push(c[0].toFixed(3)+" "+c[1].toFixed(3)+" "+c[2].toFixed(3)+" rg "+x.toFixed(2)+" "+Y(y+h).toFixed(2)+" "+w.toFixed(2)+" "+h.toFixed(2)+" re f");
+  }
+  function circle(cx, cy, r, w, c) {
+    const k = 0.5522847498 * r, f = n => n.toFixed(2);
+    P.push(c[0].toFixed(3)+" "+c[1].toFixed(3)+" "+c[2].toFixed(3)+" RG "+w+" w");
+    P.push(f(cx-r)+" "+Y(cy).toFixed(2)+" m "+
+      f(cx-r)+" "+Y(cy+k).toFixed(2)+" "+f(cx-k)+" "+Y(cy+r).toFixed(2)+" "+f(cx)+" "+Y(cy+r).toFixed(2)+" c "+
+      f(cx+k)+" "+Y(cy+r).toFixed(2)+" "+f(cx+r)+" "+Y(cy+k).toFixed(2)+" "+f(cx+r)+" "+Y(cy).toFixed(2)+" c "+
+      f(cx+r)+" "+Y(cy-k).toFixed(2)+" "+f(cx+k)+" "+Y(cy-r).toFixed(2)+" "+f(cx)+" "+Y(cy-r).toFixed(2)+" c "+
+      f(cx-k)+" "+Y(cy-r).toFixed(2)+" "+f(cx-r)+" "+Y(cy-k).toFixed(2)+" "+f(cx-r)+" "+Y(cy).toFixed(2)+" c S");
+  }
+  function arcText(cxL, cyL, rT, str, top, size) {
+    const n = str.length;
+    const spread = Math.min(Math.PI*1.05, (n * size * 0.60) / rT);
+    for (let i = 0; i < n; i++) {
+      let a, rl;
+      if (top) { a = -Math.PI/2 + (i/(n-1)-0.5)*spread; rl = a + Math.PI/2; }
+      else { a = Math.PI/2 + (0.5-i/(n-1))*spread; rl = a - Math.PI/2; }
+      T(cxL + rT*Math.cos(a), cyL + rT*Math.sin(a), str[i], "F2", size, sblue, -rl);
+    }
+  }
+  // Letterhead
+  TC(297.5, 54, "Shankardev Shishu Niketan, Bhuragaon", "F2", 20, navy);
+  TC(297.5, 80, "Bhuragaon, Morigaon, Assam - Estd. 2004", "F1", 10.5, muted);
+  line(50, 96, 545, 96, 1.4, navy);
+  TC(297.5, 122, "MARKSHEET", "F2", 17, navy);
+  TC(297.5, 144, "Annual Examination 2026", "F1", 11, ink);
+  // Student
+  let y = 176;
+  T(50, y, "Name:", "F2", 11.5, ink);
+  T(50 + wEst("Name: ", 11.5, true), y, curSt.name, "F1", 11.5, ink);
+  const rs = "Roll No: " + curSt.roll;
+  T(545 - wEst(rs, 11.5, false), y, rs, "F1", 11.5, ink);
+  y += 24;
+  T(50, y, "Class:", "F2", 11.5, ink);
+  T(50 + wEst("Class: ", 11.5, true), y, curCls.name, "F1", 11.5, ink);
+  // Marks table
+  y += 36;
+  const c0 = 50, c1 = 330, c2 = 440, c3 = 545, rh = 24, n = curCls.subjects.length;
+  fillRect(c0, y, c3-c0, rh, hfill);
+  T(c0+10, y+8.5, "SUBJECT", "F2", 10.5, muted);
+  TC((c1+c2)/2, y+8.5, "MARKS", "F2", 10.5, muted);
+  TC((c2+c3)/2, y+8.5, "STATUS", "F2", 10.5, muted);
+  line(c0, y, c3, y, 1, rule); line(c0, y+rh+n*rh, c3, y+rh+n*rh, 1, rule);
+  line(c0, y, c0, y+rh+n*rh, 1, rule); line(c3, y, c3, y+rh+n*rh, 1, rule);
+  line(c1, y, c1, y+rh+n*rh, 0.8, rule); line(c2, y, c2, y+rh+n*rh, 0.8, rule);
+  for (let i = 1; i <= n; i++) line(c0, y+rh*i, c3, y+rh*i, 0.8, rule);
+  let total = 0, allPass = true;
   curCls.subjects.forEach((sub, i) => {
-    const m = curSt.marks[i], ok = m >= 33;
-    total += m; if (!ok) failed = true;
-    x.textAlign = "left"; x.fillStyle = ink;
-    x.fillText(sub, pad, y);
-    x.textAlign = "center"; x.fillStyle = ink;
-    x.fillText(m + " / 100", W - 220, y);
-    x.fillStyle = ok ? "#1e7e34" : "#a32b2b"; x.font = "bold 18px sans-serif";
-    x.fillText(ok ? "Pass" : "Fail", W - pad - 40, y);
-    x.font = "18px sans-serif";
-    y += rowH;
+    const m = curSt.marks[i], ok = m !== null && m >= 33, ry = y + rh + i*rh;
+    total += (m || 0); if (!ok) allPass = false;
+    T(c0+10, ry+8, sub, "F1", 11, ink);
+    TC((c1+c2)/2, ry+8, (m === null ? "-" : m + " / 100"), "F1", 11, ink);
+    TC((c2+c3)/2, ry+8, ok ? "Pass" : "Fail", "F2", 11, ok ? green : red);
   });
   const max = n * 100, pct = total / max * 100;
-  x.strokeStyle = navy; x.lineWidth = 2;
-  x.beginPath(); x.moveTo(pad, y - 22); x.lineTo(W - pad, y - 22); x.stroke();
-  x.textAlign = "left"; x.fillStyle = ink; x.font = "bold 19px sans-serif";
-  x.fillText("Total", pad, y + 6);
-  x.textAlign = "center"; x.fillText(total + " / " + max, W - 220, y + 6);
-  y += 40;
-  x.textAlign = "left"; x.fillText("Percentage", pad, y + 6);
-  x.textAlign = "center"; x.fillText(pct.toFixed(2) + "%", W - 220, y + 6);
-  y += 52;
-  let div;
-  if (failed || pct < 33) div = "Fail";
-  else if (pct >= 60) div = "First Division";
-  else if (pct >= 45) div = "Second Division";
-  else div = "Third Division";
-  x.textAlign = "center"; x.font = "bold 26px Georgia,serif";
-  x.fillStyle = (div === "Fail") ? "#a32b2b" : "#1e7e34";
-  x.fillText(div, W / 2, y + 6);
-  y += 26;
-  drawStamp(x, pad+64, y+64, 58);
-  x.strokeStyle = ink; x.lineWidth = 2;
-  const sx = W - pad - 200;
-  x.beginPath(); x.moveTo(sx, y+100); x.lineTo(sx+200, y+100); x.stroke();
-  x.fillStyle = ink; x.font = "15px sans-serif"; x.textAlign = "center";
-  x.fillText("Principal", sx+100, y+124);
-  y += 168;
-  x.fillStyle = muted; x.font = "14px sans-serif";
-  const d = new Date();
-  x.fillText("Generated on " + d.toLocaleDateString("en-IN", {day:"numeric", month:"long", year:"numeric"}) + "  \u00b7  For corrections, contact the school office.", W / 2, y);
-  cv.toBlob(blob => {
-    const a = document.createElement("a");
-    const nm = curSt.name.replace(/[^a-z0-9]+/gi, "_");
-    a.href = URL.createObjectURL(blob);
-    a.download = "Result_" + curCls.name.replace(/\s+/g, "") + "_Roll" + curSt.roll + "_" + nm + ".png";
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
-  }, "image/png");
-});
+  let ty = y + rh*(n+1) + 30;
+  T(60, ty, "Total", "F2", 12, ink);
+  TC((c1+c2)/2, ty, total + " / " + max, "F2", 12, ink);
+  ty += 24;
+  T(60, ty, "Percentage", "F2", 12, ink);
+  TC((c1+c2)/2, ty, pct.toFixed(2) + "%", "F2", 12, ink);
+  ty += 36;
+  const div = !allPass ? "Fail" : pct >= 60 ? "First Division" : pct >= 45 ? "Second Division" : "Third Division";
+  TC(297.5, ty, div.toUpperCase(), "F2", 15, div === "Fail" ? red : green);
+  // Stamp + signature
+  ty += 84;
+  const scx = 150, scy = ty, R = 54;
+  P.push("q 1 0 0 1 "+scx+" "+Y(scy).toFixed(2)+" cm 0.9903 -0.1395 0.1395 0.9903 0 0 cm 1 0 0 1 "+(-scx)+" "+(-Y(scy)).toFixed(2)+" cm");
+  circle(scx, scy, R, 2.6, sblue);
+  circle(scx, scy, R-8, 1.2, sblue);
+  arcText(scx, scy, R-12, "SHANKARDEV SHISHU NIKETAN", true, 8);
+  arcText(scx, scy, R-12, "BHURAGAON - MORIGAON", false, 8);
+  TC(scx, scy-5, "ESTD 2004", "F2", 11, sblue);
+  P.push("Q");
+  const sx0 = 368, sx1 = 545, sly = ty + 64;
+  line(sx0, sly, sx1, sly, 1.2, ink);
+  TC((sx0+sx1)/2, sly+24, "Principal", "F1", 11, ink);
+  TC((sx0+sx1)/2, sly+40, "Shankardev Shishu Niketan, Bhuragaon", "F1", 8.5, muted);
+  // Footer
+  const dstr = new Date().toLocaleDateString("en-IN", {day:"numeric", month:"long", year:"numeric"});
+  TC(297.5, ty+168, "Generated on " + dstr, "F1", 9, muted);
+  TC(297.5, ty+184, "For corrections, contact the school office.", "F1", 9, muted);
+  // Assemble PDF
+  const stream = P.join("\n");
+  const objs = [
+    "<< /Type /Catalog /Pages 2 0 R >>",
+    "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+    "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>",
+    "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
+    "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>",
+    "<< /Length " + (stream.length + 1) + " >>\nstream\n" + stream + "\nendstream"
+  ];
+  let pdf = "%PDF-1.4\n";
+  const offs = [0];
+  for (let i = 0; i < 6; i++) { offs.push(pdf.length); pdf += (i+1) + " 0 obj\n" + objs[i] + "\nendobj\n"; }
+  const xref = pdf.length;
+  pdf += "xref\n0 7\n0000000000 65535 f \n";
+  for (let i = 1; i <= 6; i++) pdf += String(offs[i]).padStart(10, "0") + " 00000 n \n";
+  pdf += "trailer\n<< /Size 7 /Root 1 0 R >>\nstartxref\n" + xref + "\n%%EOF";
+  const blob = new Blob([new TextEncoder().encode(pdf)], {type: "application/pdf"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "Result_" + curCls.name.replace(/\s+/g,"") + "_Roll" + curSt.roll + "_" + curSt.name.replace(/\s+/g,"_") + ".pdf";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+document.getElementById("rdl").addEventListener("click", pdfMarksheet);
+
 </script>
 </body>
 </html>
