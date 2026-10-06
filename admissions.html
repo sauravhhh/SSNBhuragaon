@@ -79,17 +79,21 @@
       <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off">
       <div class="frow">
         <div>
-          <label for="sname">Student's name <span class="req">*</span></label>
+          <label for="sname">Student Name <span class="req">*</span></label>
           <input id="sname" name="student_name" type="text" required autocomplete="off" placeholder="Full name of the child">
         </div>
         <div>
-          <label for="dob">Date of birth <span class="req">*</span></label>
-          <input id="dob" name="dob" type="date" required>
+          <label for="pname">Parents Name <span class="req">*</span></label>
+          <input id="pname" name="parent_name" type="text" required autocomplete="off" placeholder="Parent or guardian name">
         </div>
       </div>
       <div class="frow">
         <div>
-          <label for="cls">Class applying for <span class="req">*</span></label>
+          <label for="sage">Student Age <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+          <input id="sage" name="student_age" type="number" min="2" max="20" autocomplete="off" placeholder="Age in years">
+        </div>
+        <div>
+          <label for="cls">Class Want to Take Admission <span class="req">*</span></label>
           <select id="cls" name="class_applying" required>
             <option value="" disabled selected>Select class</option>
             <option>Ankur</option><option>Mukul</option><option>Prabhat</option>
@@ -99,31 +103,11 @@
             <option>Class 10</option>
           </select>
         </div>
-        <div>
-          <label for="pname">Parent / Guardian name <span class="req">*</span></label>
-          <input id="pname" name="parent_name" type="text" required autocomplete="off" placeholder="Your full name">
-        </div>
       </div>
-      <div class="frow">
+      <div class="frow full">
         <div>
-          <label for="phone">Phone number <span class="req">*</span></label>
+          <label for="phone">Calling Number <span class="req">*</span></label>
           <input id="phone" name="phone" type="tel" required autocomplete="off" placeholder="10-digit mobile number" pattern="[0-9+ ]{10,15}">
-        </div>
-        <div>
-          <label for="addr">Village / Address <span class="req">*</span></label>
-          <input id="addr" name="address" type="text" required autocomplete="off" placeholder="Village, PO, District">
-        </div>
-      </div>
-      <div class="frow full">
-        <div>
-          <label for="pschool">Previous school (if any)</label>
-          <input id="pschool" name="previous_school" type="text" autocomplete="off" placeholder="School name and class last attended">
-        </div>
-      </div>
-      <div class="frow full">
-        <div>
-          <label for="msg">Anything we should know?</label>
-          <textarea id="msg" name="message" placeholder="Questions, or anything about the child you want us to know"></textarea>
         </div>
       </div>
       <button type="submit" class="btn navy" id="admBtn">Send enquiry</button>
@@ -158,7 +142,7 @@
       body:JSON.stringify(data)
     }).then(function(r){ return r.json(); }).then(function(j){
       if(j.success){
-        show("Thank you! Your enquiry has been sent. The school will contact you soon.",true);
+        show("Enquiry sent successfully. Our admission adviser will contact you shortly.",true);
         form.reset();
       }else{
         show("Something went wrong. Please try again or visit the school office.",false);
