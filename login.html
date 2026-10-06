@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Login &mdash; Shankardev Shishu Niketan, Bhuragaon</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="images/logo.png">
+<style>
+:root{--navy:#16345f;--navy-dark:#0f2547;--gold:#c9a227;--cream:#faf7f0;--ink:#1c1c1c;--muted:#5c6470;--line:#e9e2d3;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans",Helvetica,Arial,sans-serif;color:var(--ink);background:var(--cream);min-height:100vh;}
+.rhead{background:#fff;border-bottom:1px solid var(--line);padding:12px 20px;display:flex;align-items:center;gap:12px;}
+.rhead img{width:44px;height:44px;object-fit:contain;}
+.rhead .en{font-family:Georgia,serif;font-weight:700;color:var(--navy);font-size:16px;}
+.rhead .as{font-size:12px;color:var(--muted);}
+.wrap{max-width:520px;margin:0 auto;padding:28px 20px 60px;}
+h1{font-family:Georgia,serif;color:var(--navy);font-size:26px;text-align:center;}
+.sub{text-align:center;color:var(--muted);font-size:14px;margin:4px 0 22px;}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:0 8px 24px rgba(22,52,95,.06);}
+label{display:block;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:14px;}
+select,input{width:100%;margin-top:6px;padding:11px 12px;font-size:16px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);}
+select:focus,input:focus{outline:2px solid var(--navy);outline-offset:-1px;}
+#cap{border:1px solid var(--line);border-radius:10px;background:#f4f1e8;flex-shrink:0;}
+.err{background:#fdecea;color:#a32b2b;border:1px solid #f5c6c6;border-radius:10px;padding:10px 12px;font-size:14px;margin-bottom:14px;}
+.btn{display:block;width:100%;padding:13px;background:var(--navy);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;}
+.btn:active{transform:scale(.99);}
+.btn.ghost{background:#fff;color:var(--navy);border:1px solid var(--navy);margin-top:16px;}
+.result h2{font-family:Georgia,serif;color:var(--navy);font-size:22px;text-align:center;}
+.rmeta{text-align:center;color:var(--muted);font-size:14px;margin:4px 0 16px;}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:14px;}
+th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left;}
+th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.4px;}
+td.m,th.m{text-align:center;}
+.pass{color:#1e7e34;font-weight:700;}
+.fail{color:#a32b2b;font-weight:700;}
+.rtotal{display:flex;justify-content:space-between;font-size:15px;padding:10px 2px;border-top:2px solid var(--navy);}
+.rtotal b{font-size:18px;}
+.rdiv{text-align:center;margin-top:10px;font-family:Georgia,serif;font-size:19px;color:var(--navy);}
+.rdiv.fail{color:#a32b2b;}
+.rdiv.pass{color:#1e7e34;}
+.note{text-align:center;color:var(--muted);font-size:12px;margin-top:18px;}
+
+/* site menu button + circular reveal nav, ported from styles.css */
+#menuBtn{display:block;background:none;border:1px solid var(--line);border-radius:8px;width:42px;height:36px;cursor:pointer;position:relative;z-index:2;margin-left:auto;flex-shrink:0;}
+#menuBtn span{position:absolute;left:10px;right:10px;height:2px;background:var(--navy);border-radius:2px;}
+#menuBtn span:nth-child(1){top:11px;}
+#menuBtn span:nth-child(2){top:17px;}
+#menuBtn span:nth-child(3){top:23px;}
+#menuBtn.anim span:nth-child(1){animation:mbTopClose .55s ease-in-out forwards;}
+#menuBtn.anim span:nth-child(2){animation:mbMidClose .55s ease-in-out forwards;}
+#menuBtn.anim span:nth-child(3){animation:mbBotClose .55s ease-in-out forwards;}
+#menuBtn.anim.open span:nth-child(1){animation:mbTopOpen .55s ease-in-out forwards;}
+#menuBtn.anim.open span:nth-child(2){animation:mbMidOpen .55s ease-in-out forwards;}
+#menuBtn.anim.open span:nth-child(3){animation:mbBotOpen .55s ease-in-out forwards;}
+@keyframes mbTopOpen{0%{top:11px;transform:rotate(0deg) scaleX(1);}40%{top:17px;transform:rotate(0deg) scaleX(1);}100%{top:17px;transform:rotate(45deg) scaleX(1.45);}}
+@keyframes mbTopClose{0%{top:17px;transform:rotate(45deg) scaleX(1.45);}60%{top:17px;transform:rotate(0deg) scaleX(1);}100%{top:11px;transform:rotate(0deg) scaleX(1);}}
+@keyframes mbBotOpen{0%{top:23px;transform:rotate(0deg) scaleX(1);}40%{top:17px;transform:rotate(0deg) scaleX(1);}100%{top:17px;transform:rotate(-45deg) scaleX(1.45);}}
+@keyframes mbBotClose{0%{top:17px;transform:rotate(-45deg) scaleX(1.45);}60%{top:17px;transform:rotate(0deg) scaleX(1);}100%{top:23px;transform:rotate(0deg) scaleX(1);}}
+@keyframes mbMidOpen{0%{opacity:1;}40%,100%{opacity:0;}}
+@keyframes mbMidClose{0%,60%{opacity:0;}100%{opacity:1;}}
+#menuBtn.open{border-color:rgba(255,255,255,.4);}
+#menuBtn.open span{background:#fff;}
+#rnav{position:fixed;inset:0;z-index:1;background:radial-gradient(1200px 600px at 50% -10%,#20457c 0%,#0f2547 65%);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;padding:60px 24px;clip-path:circle(0px at var(--cx,calc(100vw - 41px)) var(--cy,40px));-webkit-clip-path:circle(0px at var(--cx,calc(100vw - 41px)) var(--cy,40px));transition:clip-path .7s cubic-bezier(.76,0,.24,1),-webkit-clip-path .7s cubic-bezier(.76,0,.24,1);pointer-events:none;}
+#rnav.open{clip-path:circle(150% at var(--cx,calc(100vw - 41px)) var(--cy,40px));-webkit-clip-path:circle(150% at var(--cx,calc(100vw - 41px)) var(--cy,40px));pointer-events:auto;}
+#rnav a{color:#fff;font-size:23px;font-family:Georgia,serif;text-decoration:none;padding:10px 18px;opacity:0;transform:translateY(16px);transition:opacity .4s ease,transform .4s ease;}
+#rnav.open a{opacity:1;transform:translateY(0);}
+#rnav.open a:nth-child(1){transition-delay:.28s;}
+#rnav.open a:nth-child(2){transition-delay:.34s;}
+#rnav.open a:nth-child(3){transition-delay:.40s;}
+#rnav.open a:nth-child(4){transition-delay:.46s;}
+#rnav.open a:nth-child(5){transition-delay:.52s;}
+#rnav.open a:nth-child(6){transition-delay:.58s;}
+#rnav a:hover{background:rgba(255,255,255,.1);}
+</style>
+</head>
+<body>
+<header class="rhead">
+  <img src="images/logo.png" alt="School emblem">
+  <div><div class="en">Shankardev Shishu Niketan, Bhuragaon</div><div class="as">Student Login</div></div>
+  <button id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+</header>
+<nav id="rnav">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="academics.html">Academics &amp; Facilities</a>
+  <a href="admissions.html">Admissions</a>
+  <a href="notices.html">Notices</a>
+  <a href="contact.html">Contact</a>
+</nav>
+<main class="wrap">
+  <h1>Student Login</h1>
+  <p class="sub">Annual Examination 2026</p>
+  <form id="rform" class="card" autocomplete="off">
+    <label>Class
+      <select id="rclass"><option value="">Loading&hellip;</option></select>
+    </label>
+    <label>Roll No
+      <input id="rroll" inputmode="numeric" pattern="[0-9]*" placeholder="e.g. 5">
+    </label>
+    <label style="margin-bottom:0">Date of Birth
+      <input id="rdob" type="date">
+    </label>
+    <div id="rerr" class="err" hidden></div>
+    <button class="btn" type="submit" style="margin-top:16px">Log In</button>
+  </form>
+  <div id="rout" class="card result" hidden>
+    <h2 id="rname"></h2>
+    <div class="rmeta" id="rmeta"></div>
+    <table>
+      <thead><tr><th>Subject</th><th class="m">Marks</th><th class="m">Status</th></tr></thead>
+      <tbody id="rtbody"></tbody>
+    </table>
+    <div class="rtotal"><span>Total (out of <span id="rmax"></span>)</span><b id="rtot"></b></div>
+    <div class="rtotal"><span>Percentage</span><b id="rpct"></b></div>
+    <div class="rdiv" id="rdiv"></div>
+    </div>
+    <button class="btn" id="rdl" type="button" style="margin-top:10px">Download PDF</button>
+    <button class="btn ghost" id="rback" type="button">Log Out</button>
+  </div>
+  <p class="note">For any correction, contact the school office.</p>
+</main>
+<script>
+"use strict";
+const XLSX_URL = "results/onxxgawftv.xlsx";
+const FALLBACK_DATA = {"classes": [{"name": "Ankur", "students": [{"roll": 1, "name": "Hirak Deka", "dob": "10-11-2022", "entries": [{"s": "Assamese", "m": 70}, {"s": "English", "m": 63}, {"s": "Mathematics", "m": 21}, {"s": "Art & Craft", "m": 22}]}, {"roll": 2, "name": "Kaushik Boro", "dob": "12-07-2022", "entries": [{"s": "Assamese", "m": 20}, {"s": "English", "m": 97}, {"s": "Mathematics", "m": 50}, {"s": "Art & Craft", "m": 28}]}, {"roll": 3, "name": "Himangshu Gogoi", "dob": "06-02-2022", "entries": [{"s": "Assamese", "m": 68}, {"s": "English", "m": 96}, {"s": "Mathematics", "m": 79}, {"s": "Art & Craft", "m": 28}]}, {"roll": 4, "name": "Barnali Hazarika", "dob": "04-02-2022", "entries": [{"s": "Assamese", "m": 39}, {"s": "English", "m": 97}, {"s": "Mathematics", "m": 29}, {"s": "Art & Craft", "m": 78}]}, {"roll": 5, "name": "Mitali Talukdar", "dob": "02-10-2022", "entries": [{"s": "Assamese", "m": 73}, {"s": "English", "m": 57}, {"s": "Mathematics", "m": 53}, {"s": "Art & Craft", "m": 39}]}, {"roll": 6, "name": "Mamoni Bhattacharya", "dob": "17-01-2022", "entries": [{"s": "Assamese", "m": 47}, {"s": "English", "m": 63}, {"s": "Mathematics", "m": 52}, {"s": "Art & Craft", "m": 19}]}, {"roll": 7, "name": "Nirupama Boro", "dob": "26-10-2022", "entries": [{"s": "Assamese", "m": 48}, {"s": "English", "m": 61}, {"s": "Mathematics", "m": 47}, {"s": "Art & Craft", "m": 43}]}, {"roll": 8, "name": "Rimjim Das", "dob": "01-07-2022", "entries": [{"s": "Assamese", "m": 19}, {"s": "English", "m": 94}, {"s": "Mathematics", "m": 89}, {"s": "Art & Craft", "m": 96}]}, {"roll": 9, "name": "Rahul Gogoi", "dob": "19-08-2022", "entries": [{"s": "Assamese", "m": 98}, {"s": "English", "m": 22}, {"s": "Mathematics", "m": 25}, {"s": "Art & Craft", "m": 45}]}, {"roll": 10, "name": "Partha Kakati", "dob": "22-02-2022", "entries": [{"s": "Assamese", "m": 85}, {"s": "English", "m": 70}, {"s": "Mathematics", "m": 94}, {"s": "Art & Craft", "m": 90}]}]}, {"name": "Mukul", "students": [{"roll": 1, "name": "Dimpi Das", "dob": "01-08-2021", "entries": [{"s": "Assamese", "m": 92}, {"s": "English", "m": 90}, {"s": "Mathematics", "m": 46}, {"s": "Art & Craft", "m": 54}]}, {"roll": 2, "name": "Sumi Sharma", "dob": "14-09-2021", "entries": [{"s": "Assamese", "m": 37}, {"s": "English", "m": 92}, {"s": "Mathematics", "m": 65}, {"s": "Art & Craft", "m": 48}]}, {"roll": 3, "name": "Karabi Choudhury", "dob": "24-11-2021", "entries": [{"s": "Assamese", "m": 42}, {"s": "English", "m": 56}, {"s": "Mathematics", "m": 89}, {"s": "Art & Craft", "m": 68}]}, {"roll": 4, "name": "Sumi Deka", "dob": "12-09-2021", "entries": [{"s": "Assamese", "m": 54}, {"s": "English", "m": 61}, {"s": "Mathematics", "m": 88}, {"s": "Art & Craft", "m": 94}]}, {"roll": 5, "name": "Kangkan Baruah", "dob": "04-08-2021", "entries": [{"s": "Assamese", "m": 67}, {"s": "English", "m": 88}, {"s": "Mathematics", "m": 43}, {"s": "Art & Craft", "m": 29}]}, {"roll": 6, "name": "Sourav Medhi", "dob": "05-09-2021", "entries": [{"s": "Assamese", "m": 98}, {"s": "English", "m": 63}, {"s": "Mathematics", "m": 55}, {"s": "Art & Craft", "m": 67}]}, {"roll": 7, "name": "Dimpi Nath", "dob": "08-10-2021", "entries": [{"s": "Assamese", "m": 88}, {"s": "English", "m": 34}, {"s": "Mathematics", "m": 91}, {"s": "Art & Craft", "m": 44}]}, {"roll": 8, "name": "Rupam Rabha", "dob": "02-01-2021", "entries": [{"s": "Assamese", "m": 60}, {"s": "English", "m": 43}, {"s": "Mathematics", "m": 53}, {"s": "Art & Craft", "m": 90}]}, {"roll": 9, "name": "Dipankar Saikia", "dob": "01-07-2021", "entries": [{"s": "Assamese", "m": 35}, {"s": "English", "m": 65}, {"s": "Mathematics", "m": 48}, {"s": "Art & Craft", "m": 88}]}, {"roll": 10, "name": "Mitali Kalita", "dob": "05-08-2021", "entries": [{"s": "Assamese", "m": 71}, {"s": "English", "m": 85}, {"s": "Mathematics", "m": 81}, {"s": "Art & Craft", "m": 89}]}]}, {"name": "Prabhat", "students": [{"roll": 1, "name": "Mitali Nath", "dob": "24-12-2020", "entries": [{"s": "Assamese", "m": 77}, {"s": "English", "m": 22}, {"s": "Mathematics", "m": 37}, {"s": "Art & Craft", "m": 35}]}, {"roll": 2, "name": "Kangkan Hazarika", "dob": "14-11-2020", "entries": [{"s": "Assamese", "m": 62}, {"s": "English", "m": 42}, {"s": "Mathematics", "m": 51}, {"s": "Art & Craft", "m": 76}]}, {"roll": 3, "name": "Dimpi Choudhury", "dob": "03-08-2020", "entries": [{"s": "Assamese", "m": 97}, {"s": "English", "m": 45}, {"s": "Mathematics", "m": 70}, {"s": "Art & Craft", "m": 23}]}, {"roll": 4, "name": "Abhijit Deka", "dob": "01-03-2020", "entries": [{"s": "Assamese", "m": 91}, {"s": "English", "m": 46}, {"s": "Mathematics", "m": 47}, {"s": "Art & Craft", "m": 53}]}, {"roll": 5, "name": "Hirak Boro", "dob": "28-02-2020", "entries": [{"s": "Assamese", "m": 67}, {"s": "English", "m": 65}, {"s": "Mathematics", "m": 43}, {"s": "Art & Craft", "m": 37}]}, {"roll": 6, "name": "Rupam Bhattacharya", "dob": "23-11-2020", "entries": [{"s": "Assamese", "m": 71}, {"s": "English", "m": 71}, {"s": "Mathematics", "m": 70}, {"s": "Art & Craft", "m": 49}]}, {"roll": 7, "name": "Pooja Talukdar", "dob": "07-01-2020", "entries": [{"s": "Assamese", "m": 46}, {"s": "English", "m": 44}, {"s": "Mathematics", "m": 23}, {"s": "Art & Craft", "m": 75}]}, {"roll": 8, "name": "Rahul Nath", "dob": "11-07-2020", "entries": [{"s": "Assamese", "m": 79}, {"s": "English", "m": 62}, {"s": "Mathematics", "m": 85}, {"s": "Art & Craft", "m": 72}]}, {"roll": 9, "name": "Jyotirmoy Das", "dob": "12-09-2020", "entries": [{"s": "Assamese", "m": 83}, {"s": "English", "m": 25}, {"s": "Mathematics", "m": 87}, {"s": "Art & Craft", "m": 94}]}, {"roll": 10, "name": "Mamoni Baruah", "dob": "09-08-2020", "entries": [{"s": "Assamese", "m": 51}, {"s": "English", "m": 74}, {"s": "Mathematics", "m": 44}, {"s": "Art & Craft", "m": 50}]}]}, {"name": "Class 1", "students": [{"roll": 1, "name": "Nayan Medhi", "dob": "25-11-2019", "entries": [{"s": "Assamese", "m": 40}, {"s": "English", "m": 71}, {"s": "Mathematics", "m": 75}, {"s": "EVS", "m": 35}, {"s": "Hindi", "m": 34}]}, {"roll": 2, "name": "Pallabi Das", "dob": "19-04-2019", "entries": [{"s": "Assamese", "m": 60}, {"s": "English", "m": 43}, {"s": "Mathematics", "m": 52}, {"s": "EVS", "m": 22}, {"s": "Hindi", "m": 21}]}, {"roll": 3, "name": "Mamoni Choudhury", "dob": "16-12-2019", "entries": [{"s": "Assamese", "m": 59}, {"s": "English", "m": 24}, {"s": "Mathematics", "m": 34}, {"s": "EVS", "m": 42}, {"s": "Hindi", "m": 79}]}, {"roll": 4, "name": "Manash Baruah", "dob": "22-11-2019", "entries": [{"s": "Assamese", "m": 83}, {"s": "English", "m": 63}, {"s": "Mathematics", "m": 54}, {"s": "EVS", "m": 22}, {"s": "Hindi", "m": 85}]}, {"roll": 5, "name": "Partha Boro", "dob": "18-05-2019", "entries": [{"s": "Assamese", "m": 82}, {"s": "English", "m": 78}, {"s": "Mathematics", "m": 54}, {"s": "EVS", "m": 22}, {"s": "Hindi", "m": 43}]}, {"roll": 6, "name": "Hirak Mahanta", "dob": "02-01-2019", "entries": [{"s": "Assamese", "m": 53}, {"s": "English", "m": 57}, {"s": "Mathematics", "m": 26}, {"s": "EVS", "m": 51}, {"s": "Hindi", "m": 69}]}, {"roll": 7, "name": "Chayan Choudhury", "dob": "15-10-2019", "entries": [{"s": "Assamese", "m": 40}, {"s": "English", "m": 74}, {"s": "Mathematics", "m": 79}, {"s": "EVS", "m": 57}, {"s": "Hindi", "m": 68}]}, {"roll": 8, "name": "Kaushik Bhattacharya", "dob": "07-09-2019", "entries": [{"s": "Assamese", "m": 55}, {"s": "English", "m": 87}, {"s": "Mathematics", "m": 19}, {"s": "EVS", "m": 63}, {"s": "Hindi", "m": 78}]}, {"roll": 9, "name": "Dipankar Gogoi", "dob": "29-06-2019", "entries": [{"s": "Assamese", "m": 52}, {"s": "English", "m": 83}, {"s": "Mathematics", "m": 98}, {"s": "EVS", "m": 56}, {"s": "Hindi", "m": 85}]}, {"roll": 10, "name": "Manash Mahanta", "dob": "14-08-2019", "entries": [{"s": "Assamese", "m": 56}, {"s": "English", "m": 19}, {"s": "Mathematics", "m": 34}, {"s": "EVS", "m": 35}, {"s": "Hindi", "m": 54}]}]}, {"name": "Class 2", "students": [{"roll": 1, "name": "Trishna Saikia", "dob": "03-03-2018", "entries": [{"s": "Assamese", "m": 64}, {"s": "English", "m": 96}, {"s": "Mathematics", "m": 55}, {"s": "EVS", "m": 51}, {"s": "Hindi", "m": 34}]}, {"roll": 2, "name": "Sumi Saikia", "dob": "15-08-2018", "entries": [{"s": "Assamese", "m": 38}, {"s": "English", "m": 88}, {"s": "Mathematics", "m": 85}, {"s": "EVS", "m": 87}, {"s": "Hindi", "m": 92}]}, {"roll": 3, "name": "Pooja Kakati", "dob": "03-12-2018", "entries": [{"s": "Assamese", "m": 59}, {"s": "English", "m": 59}, {"s": "Mathematics", "m": 55}, {"s": "EVS", "m": 79}, {"s": "Hindi", "m": 26}]}, {"roll": 4, "name": "Pranjal Deka", "dob": "27-09-2018", "entries": [{"s": "Assamese", "m": 76}, {"s": "English", "m": 83}, {"s": "Mathematics", "m": 46}, {"s": "EVS", "m": 65}, {"s": "Hindi", "m": 27}]}, {"roll": 5, "name": "Juri Gogoi", "dob": "04-09-2018", "entries": [{"s": "Assamese", "m": 94}, {"s": "English", "m": 92}, {"s": "Mathematics", "m": 86}, {"s": "EVS", "m": 18}, {"s": "Hindi", "m": 51}]}, {"roll": 6, "name": "Rimjim Hazarika", "dob": "22-10-2018", "entries": [{"s": "Assamese", "m": 76}, {"s": "English", "m": 49}, {"s": "Mathematics", "m": 39}, {"s": "EVS", "m": 94}, {"s": "Hindi", "m": 44}]}, {"roll": 7, "name": "Priya Dutta", "dob": "16-09-2018", "entries": [{"s": "Assamese", "m": 61}, {"s": "English", "m": 52}, {"s": "Mathematics", "m": 69}, {"s": "EVS", "m": 63}, {"s": "Hindi", "m": 42}]}, {"roll": 8, "name": "Juri Boro", "dob": "21-01-2018", "entries": [{"s": "Assamese", "m": 95}, {"s": "English", "m": 35}, {"s": "Mathematics", "m": 68}, {"s": "EVS", "m": 80}, {"s": "Hindi", "m": 38}]}, {"roll": 9, "name": "Ankita Nath", "dob": "15-09-2018", "entries": [{"s": "Assamese", "m": 91}, {"s": "English", "m": 98}, {"s": "Mathematics", "m": 52}, {"s": "EVS", "m": 40}, {"s": "Hindi", "m": 40}]}, {"roll": 10, "name": "Pooja Hazarika", "dob": "19-10-2018", "entries": [{"s": "Assamese", "m": 80}, {"s": "English", "m": 52}, {"s": "Mathematics", "m": 51}, {"s": "EVS", "m": 38}, {"s": "Hindi", "m": 98}]}]}, {"name": "Class 3", "students": [{"roll": 1, "name": "Ankita Kakati", "dob": "19-07-2017", "entries": [{"s": "Assamese", "m": 55}, {"s": "English", "m": 53}, {"s": "Mathematics", "m": 50}, {"s": "EVS", "m": 44}, {"s": "Hindi", "m": 95}]}, {"roll": 2, "name": "Rupam Deka", "dob": "16-08-2017", "entries": [{"s": "Assamese", "m": 51}, {"s": "English", "m": 62}, {"s": "Mathematics", "m": 85}, {"s": "EVS", "m": 77}, {"s": "Hindi", "m": 66}]}, {"roll": 3, "name": "Manash Bora", "dob": "14-03-2017", "entries": [{"s": "Assamese", "m": 54}, {"s": "English", "m": 43}, {"s": "Mathematics", "m": 95}, {"s": "EVS", "m": 28}, {"s": "Hindi", "m": 47}]}, {"roll": 4, "name": "Anaya Kakati", "dob": "07-10-2017", "entries": [{"s": "Assamese", "m": 72}, {"s": "English", "m": 26}, {"s": "Mathematics", "m": 57}, {"s": "EVS", "m": 60}, {"s": "Hindi", "m": 43}]}, {"roll": 5, "name": "Jyotirmoy Hazarika", "dob": "25-04-2017", "entries": [{"s": "Assamese", "m": 58}, {"s": "English", "m": 66}, {"s": "Mathematics", "m": 50}, {"s": "EVS", "m": 67}, {"s": "Hindi", "m": 85}]}, {"roll": 6, "name": "Sumi Dutta", "dob": "05-05-2017", "entries": [{"s": "Assamese", "m": 51}, {"s": "English", "m": 61}, {"s": "Mathematics", "m": 69}, {"s": "EVS", "m": 82}, {"s": "Hindi", "m": 94}]}, {"roll": 7, "name": "Rupam Gogoi", "dob": "30-05-2017", "entries": [{"s": "Assamese", "m": 83}, {"s": "English", "m": 73}, {"s": "Mathematics", "m": 59}, {"s": "EVS", "m": 87}, {"s": "Hindi", "m": 41}]}, {"roll": 8, "name": "Pooja Sarmah", "dob": "24-01-2017", "entries": [{"s": "Assamese", "m": 50}, {"s": "English", "m": 96}, {"s": "Mathematics", "m": 65}, {"s": "EVS", "m": 62}, {"s": "Hindi", "m": 97}]}, {"roll": 9, "name": "Kangkan Sarmah", "dob": "07-09-2017", "entries": [{"s": "Assamese", "m": 61}, {"s": "English", "m": 51}, {"s": "Mathematics", "m": 80}, {"s": "EVS", "m": 82}, {"s": "Hindi", "m": 90}]}, {"roll": 10, "name": "Chayan Dutta", "dob": "02-10-2017", "entries": [{"s": "Assamese", "m": 92}, {"s": "English", "m": 85}, {"s": "Mathematics", "m": 67}, {"s": "EVS", "m": 85}, {"s": "Hindi", "m": 76}]}]}, {"name": "Class 4", "students": [{"roll": 1, "name": "Himangshu Dutta", "dob": "31-03-2016", "entries": [{"s": "Assamese", "m": 71}, {"s": "English", "m": 79}, {"s": "Mathematics", "m": 42}, {"s": "EVS", "m": 61}, {"s": "Hindi", "m": 47}]}, {"roll": 2, "name": "Rimjim Bhattacharya", "dob": "31-12-2016", "entries": [{"s": "Assamese", "m": 55}, {"s": "English", "m": 40}, {"s": "Mathematics", "m": 98}, {"s": "EVS", "m": 65}, {"s": "Hindi", "m": 84}]}, {"roll": 3, "name": "Chayan Bhattacharya", "dob": "19-05-2016", "entries": [{"s": "Assamese", "m": 40}, {"s": "English", "m": 77}, {"s": "Mathematics", "m": 76}, {"s": "EVS", "m": 95}, {"s": "Hindi", "m": 97}]}, {"roll": 4, "name": "Aarav Sarmah", "dob": "14-11-2016", "entries": [{"s": "Assamese", "m": 52}, {"s": "English", "m": 64}, {"s": "Mathematics", "m": 79}, {"s": "EVS", "m": 46}, {"s": "Hindi", "m": 85}]}, {"roll": 5, "name": "Dimpi Rabha", "dob": "17-02-2016", "entries": [{"s": "Assamese", "m": 66}, {"s": "English", "m": 41}, {"s": "Mathematics", "m": 74}, {"s": "EVS", "m": 50}, {"s": "Hindi", "m": 50}]}, {"roll": 6, "name": "Pranjal Saikia", "dob": "24-10-2016", "entries": [{"s": "Assamese", "m": 82}, {"s": "English", "m": 47}, {"s": "Mathematics", "m": 79}, {"s": "EVS", "m": 54}, {"s": "Hindi", "m": 31}]}, {"roll": 7, "name": "Nayan Boro", "dob": "19-05-2016", "entries": [{"s": "Assamese", "m": 46}, {"s": "English", "m": 46}, {"s": "Mathematics", "m": 70}, {"s": "EVS", "m": 93}, {"s": "Hindi", "m": 91}]}, {"roll": 8, "name": "Bikash Deka", "dob": "16-04-2016", "entries": [{"s": "Assamese", "m": 76}, {"s": "English", "m": 53}, {"s": "Mathematics", "m": 53}, {"s": "EVS", "m": 82}, {"s": "Hindi", "m": 98}]}, {"roll": 9, "name": "Himangshu Bora", "dob": "21-03-2016", "entries": [{"s": "Assamese", "m": 80}, {"s": "English", "m": 44}, {"s": "Mathematics", "m": 41}, {"s": "EVS", "m": 44}, {"s": "Hindi", "m": 47}]}, {"roll": 10, "name": "Mitali Baruah", "dob": "13-05-2016", "entries": [{"s": "Assamese", "m": 95}, {"s": "English", "m": 25}, {"s": "Mathematics", "m": 53}, {"s": "EVS", "m": 23}, {"s": "Hindi", "m": 16}]}]}, {"name": "Class 5", "students": [{"roll": 1, "name": "Jyotirmoy Choudhury", "dob": "12-07-2015", "entries": [{"s": "Assamese", "m": 64}, {"s": "English", "m": 88}, {"s": "Mathematics", "m": 43}, {"s": "EVS", "m": 89}, {"s": "Hindi", "m": 79}]}, {"roll": 2, "name": "Mitali Boro", "dob": "05-11-2015", "entries": [{"s": "Assamese", "m": 96}, {"s": "English", "m": 76}, {"s": "Mathematics", "m": 94}, {"s": "EVS", "m": 58}, {"s": "Hindi", "m": 49}]}, {"roll": 3, "name": "Bikash Nath", "dob": "11-02-2015", "entries": [{"s": "Assamese", "m": 89}, {"s": "English", "m": 66}, {"s": "Mathematics", "m": 69}, {"s": "EVS", "m": 65}, {"s": "Hindi", "m": 81}]}, {"roll": 4, "name": "Sumi Boro", "dob": "28-12-2015", "entries": [{"s": "Assamese", "m": 60}, {"s": "English", "m": 77}, {"s": "Mathematics", "m": 44}, {"s": "EVS", "m": 56}, {"s": "Hindi", "m": 45}]}, {"roll": 5, "name": "Priya Sarmah", "dob": "21-03-2015", "entries": [{"s": "Assamese", "m": 74}, {"s": "English", "m": 52}, {"s": "Mathematics", "m": 43}, {"s": "EVS", "m": 53}, {"s": "Hindi", "m": 91}]}, {"roll": 6, "name": "Partha Bora", "dob": "23-10-2015", "entries": [{"s": "Assamese", "m": 66}, {"s": "English", "m": 72}, {"s": "Mathematics", "m": 58}, {"s": "EVS", "m": 85}, {"s": "Hindi", "m": 71}]}, {"roll": 7, "name": "Aarav Bora", "dob": "04-06-2015", "entries": [{"s": "Assamese", "m": 84}, {"s": "English", "m": 98}, {"s": "Mathematics", "m": 44}, {"s": "EVS", "m": 45}, {"s": "Hindi", "m": 78}]}, {"roll": 8, "name": "Mintu Bora", "dob": "19-02-2015", "entries": [{"s": "Assamese", "m": 54}, {"s": "English", "m": 90}, {"s": "Mathematics", "m": 61}, {"s": "EVS", "m": 71}, {"s": "Hindi", "m": 85}]}, {"roll": 9, "name": "Utpal Mahanta", "dob": "02-06-2015", "entries": [{"s": "Assamese", "m": 94}, {"s": "English", "m": 87}, {"s": "Mathematics", "m": 60}, {"s": "EVS", "m": 55}, {"s": "Hindi", "m": 58}]}, {"roll": 10, "name": "Anaya Saikia", "dob": "06-03-2015", "entries": [{"s": "Assamese", "m": 95}, {"s": "English", "m": 92}, {"s": "Mathematics", "m": 55}, {"s": "EVS", "m": 94}, {"s": "Hindi", "m": 48}]}]}, {"name": "Class 6", "students": [{"roll": 1, "name": "Abhijit Kalita", "dob": "20-04-2014", "entries": [{"s": "Assamese", "m": 69}, {"s": "English", "m": 69}, {"s": "Mathematics", "m": 43}, {"s": "Science", "m": 31}, {"s": "Social Science", "m": 64}, {"s": "Hindi", "m": 41}]}, {"roll": 2, "name": "Rima Bora", "dob": "01-05-2014", "entries": [{"s": "Assamese", "m": 60}, {"s": "English", "m": 72}, {"s": "Mathematics", "m": 59}, {"s": "Science", "m": 70}, {"s": "Social Science", "m": 63}, {"s": "Hindi", "m": 53}]}, {"roll": 3, "name": "Mamoni Dutta", "dob": "15-06-2014", "entries": [{"s": "Assamese", "m": 71}, {"s": "English", "m": 53}, {"s": "Mathematics", "m": 54}, {"s": "Science", "m": 54}, {"s": "Social Science", "m": 77}, {"s": "Hindi", "m": 69}]}, {"roll": 4, "name": "Barnali Choudhury", "dob": "09-06-2014", "entries": [{"s": "Assamese", "m": 64}, {"s": "English", "m": 70}, {"s": "Mathematics", "m": 61}, {"s": "Science", "m": 45}, {"s": "Social Science", "m": 78}, {"s": "Hindi", "m": 89}]}, {"roll": 5, "name": "Rupam Medhi", "dob": "01-07-2014", "entries": [{"s": "Assamese", "m": 41}, {"s": "English", "m": 44}, {"s": "Mathematics", "m": 83}, {"s": "Science", "m": 32}, {"s": "Social Science", "m": 94}, {"s": "Hindi", "m": 71}]}, {"roll": 6, "name": "Kasturi Sarmah", "dob": "09-07-2014", "entries": [{"s": "Assamese", "m": 95}, {"s": "English", "m": 56}, {"s": "Mathematics", "m": 49}, {"s": "Science", "m": 87}, {"s": "Social Science", "m": 42}, {"s": "Hindi", "m": 94}]}, {"roll": 7, "name": "Rima Rabha", "dob": "15-12-2014", "entries": [{"s": "Assamese", "m": 68}, {"s": "English", "m": 42}, {"s": "Mathematics", "m": 51}, {"s": "Science", "m": 67}, {"s": "Social Science", "m": 72}, {"s": "Hindi", "m": 48}]}, {"roll": 8, "name": "Utpal Baruah", "dob": "22-11-2014", "entries": [{"s": "Assamese", "m": 71}, {"s": "English", "m": 52}, {"s": "Mathematics", "m": 98}, {"s": "Science", "m": 86}, {"s": "Social Science", "m": 62}, {"s": "Hindi", "m": 43}]}, {"roll": 9, "name": "Hirak Baruah", "dob": "22-03-2014", "entries": [{"s": "Assamese", "m": 52}, {"s": "English", "m": 76}, {"s": "Mathematics", "m": 83}, {"s": "Science", "m": 89}, {"s": "Social Science", "m": 96}, {"s": "Hindi", "m": 77}]}, {"roll": 10, "name": "Anaya Choudhury", "dob": "31-05-2014", "entries": [{"s": "Assamese", "m": 92}, {"s": "English", "m": 80}, {"s": "Mathematics", "m": 76}, {"s": "Science", "m": 42}, {"s": "Social Science", "m": 63}, {"s": "Hindi", "m": 85}]}]}, {"name": "Class 7", "students": [{"roll": 1, "name": "Karabi Saikia", "dob": "22-01-2013", "entries": [{"s": "Assamese", "m": 44}, {"s": "English", "m": 90}, {"s": "Mathematics", "m": 74}, {"s": "Science", "m": 93}, {"s": "Social Science", "m": 90}, {"s": "Hindi", "m": 41}]}, {"roll": 2, "name": "Nayan Saikia", "dob": "30-01-2013", "entries": [{"s": "Assamese", "m": 62}, {"s": "English", "m": 66}, {"s": "Mathematics", "m": 98}, {"s": "Science", "m": 66}, {"s": "Social Science", "m": 71}, {"s": "Hindi", "m": 74}]}, {"roll": 3, "name": "Aarav Talukdar", "dob": "08-09-2013", "entries": [{"s": "Assamese", "m": 63}, {"s": "English", "m": 61}, {"s": "Mathematics", "m": 97}, {"s": "Science", "m": 49}, {"s": "Social Science", "m": 96}, {"s": "Hindi", "m": 98}]}, {"roll": 4, "name": "Rimjim Saikia", "dob": "18-06-2013", "entries": [{"s": "Assamese", "m": 78}, {"s": "English", "m": 59}, {"s": "Mathematics", "m": 48}, {"s": "Science", "m": 91}, {"s": "Social Science", "m": 49}, {"s": "Hindi", "m": 67}]}, {"roll": 5, "name": "Mintu Saikia", "dob": "04-09-2013", "entries": [{"s": "Assamese", "m": 46}, {"s": "English", "m": 71}, {"s": "Mathematics", "m": 55}, {"s": "Science", "m": 43}, {"s": "Social Science", "m": 80}, {"s": "Hindi", "m": 79}]}, {"roll": 6, "name": "Priya Hazarika", "dob": "04-02-2013", "entries": [{"s": "Assamese", "m": 80}, {"s": "English", "m": 67}, {"s": "Mathematics", "m": 97}, {"s": "Science", "m": 54}, {"s": "Social Science", "m": 73}, {"s": "Hindi", "m": 78}]}, {"roll": 7, "name": "Utpal Boro", "dob": "17-10-2013", "entries": [{"s": "Assamese", "m": 24}, {"s": "English", "m": 36}, {"s": "Mathematics", "m": 37}, {"s": "Science", "m": 26}, {"s": "Social Science", "m": 30}, {"s": "Hindi", "m": 34}]}, {"roll": 8, "name": "Pranjal Rabha", "dob": "04-06-2013", "entries": [{"s": "Assamese", "m": 47}, {"s": "English", "m": 94}, {"s": "Mathematics", "m": 65}, {"s": "Science", "m": 43}, {"s": "Social Science", "m": 52}, {"s": "Hindi", "m": 93}]}, {"roll": 9, "name": "Juri Rabha", "dob": "19-04-2013", "entries": [{"s": "Assamese", "m": 36}, {"s": "English", "m": 28}, {"s": "Mathematics", "m": 12}, {"s": "Science", "m": 20}, {"s": "Social Science", "m": 22}, {"s": "Hindi", "m": 14}]}, {"roll": 10, "name": "Rimjim Kalita", "dob": "09-06-2013", "entries": [{"s": "Assamese", "m": 50}, {"s": "English", "m": 84}, {"s": "Mathematics", "m": 43}, {"s": "Science", "m": 57}, {"s": "Social Science", "m": 40}, {"s": "Hindi", "m": 81}]}]}, {"name": "Class 8", "students": [{"roll": 1, "name": "Sourav Bora", "dob": "23-08-2012", "entries": [{"s": "Assamese", "m": 52}, {"s": "English", "m": 77}, {"s": "Mathematics", "m": 59}, {"s": "Science", "m": 61}, {"s": "Social Science", "m": 68}, {"s": "Hindi", "m": 73}]}, {"roll": 2, "name": "Rahul Medhi", "dob": "21-11-2012", "entries": [{"s": "Assamese", "m": 53}, {"s": "English", "m": 55}, {"s": "Mathematics", "m": 74}, {"s": "Science", "m": 94}, {"s": "Social Science", "m": 78}, {"s": "Hindi", "m": 96}]}, {"roll": 3, "name": "Pallabi Hazarika", "dob": "06-05-2012", "entries": [{"s": "Assamese", "m": 63}, {"s": "English", "m": 94}, {"s": "Mathematics", "m": 43}, {"s": "Science", "m": 92}, {"s": "Social Science", "m": 86}, {"s": "Hindi", "m": 80}]}, {"roll": 4, "name": "Hirak Kakati", "dob": "15-08-2012", "entries": [{"s": "Assamese", "m": 91}, {"s": "English", "m": 43}, {"s": "Mathematics", "m": 75}, {"s": "Science", "m": 72}, {"s": "Social Science", "m": 71}, {"s": "Hindi", "m": 57}]}, {"roll": 5, "name": "Dimpi Medhi", "dob": "21-11-2012", "entries": [{"s": "Assamese", "m": 87}, {"s": "English", "m": 66}, {"s": "Mathematics", "m": 97}, {"s": "Science", "m": 88}, {"s": "Social Science", "m": 51}, {"s": "Hindi", "m": 80}]}, {"roll": 6, "name": "Kaushik Das", "dob": "11-01-2012", "entries": [{"s": "Assamese", "m": 54}, {"s": "English", "m": 42}, {"s": "Mathematics", "m": 88}, {"s": "Science", "m": 25}, {"s": "Social Science", "m": 63}, {"s": "Hindi", "m": 74}]}, {"roll": 7, "name": "Dhruba Dutta", "dob": "16-09-2012", "entries": [{"s": "Assamese", "m": 97}, {"s": "English", "m": 86}, {"s": "Mathematics", "m": 49}, {"s": "Science", "m": 60}, {"s": "Social Science", "m": 83}, {"s": "Hindi", "m": 70}]}, {"roll": 8, "name": "Mintu Deka", "dob": "19-02-2012", "entries": [{"s": "Assamese", "m": 80}, {"s": "English", "m": 56}, {"s": "Mathematics", "m": 50}, {"s": "Science", "m": 89}, {"s": "Social Science", "m": 49}, {"s": "Hindi", "m": 52}]}, {"roll": 9, "name": "Trishna Hazarika", "dob": "14-05-2012", "entries": [{"s": "Assamese", "m": 42}, {"s": "English", "m": 79}, {"s": "Mathematics", "m": 72}, {"s": "Science", "m": 69}, {"s": "Social Science", "m": 55}, {"s": "Hindi", "m": 64}]}, {"roll": 10, "name": "Mitali Bhattacharya", "dob": "23-03-2012", "entries": [{"s": "Assamese", "m": 28}, {"s": "English", "m": 41}, {"s": "Mathematics", "m": 75}, {"s": "Science", "m": 22}, {"s": "Social Science", "m": 67}, {"s": "Hindi", "m": 46}]}]}, {"name": "Class 9", "students": [{"roll": 1, "name": "Mintu Choudhury", "dob": "13-09-2011", "entries": [{"s": "Assamese", "m": 59}, {"s": "English", "m": 42}, {"s": "Mathematics", "m": 91}, {"s": "Science", "m": 42}, {"s": "Social Science", "m": 64}, {"s": "Adv. Mathematics", "m": 55}]}, {"roll": 2, "name": "Rupam Kalita", "dob": "05-05-2011", "entries": [{"s": "Assamese", "m": 73}, {"s": "English", "m": 73}, {"s": "Mathematics", "m": 91}, {"s": "Science", "m": 50}, {"s": "Social Science", "m": 85}, {"s": "Hindi", "m": 86}]}, {"roll": 3, "name": "Kasturi Baruah", "dob": "29-05-2011", "entries": [{"s": "Assamese", "m": 81}, {"s": "English", "m": 61}, {"s": "Mathematics", "m": 77}, {"s": "Science", "m": 54}, {"s": "Social Science", "m": 76}, {"s": "Sanskrit", "m": 64}]}, {"roll": 4, "name": "Aarav Baruah", "dob": "29-07-2011", "entries": [{"s": "Assamese", "m": 62}, {"s": "English", "m": 40}, {"s": "Mathematics", "m": 80}, {"s": "Science", "m": 95}, {"s": "Social Science", "m": 85}, {"s": "Adv. Mathematics", "m": 86}]}, {"roll": 5, "name": "Kasturi Mahanta", "dob": "10-10-2011", "entries": [{"s": "Assamese", "m": 96}, {"s": "English", "m": 81}, {"s": "Mathematics", "m": 97}, {"s": "Science", "m": 49}, {"s": "Social Science", "m": 95}, {"s": "Sanskrit", "m": 81}]}, {"roll": 6, "name": "Rituparna Hazarika", "dob": "05-09-2011", "entries": [{"s": "Assamese", "m": 98}, {"s": "English", "m": 63}, {"s": "Mathematics", "m": 88}, {"s": "Science", "m": 55}, {"s": "Social Science", "m": 57}, {"s": "Adv. Mathematics", "m": 64}]}, {"roll": 7, "name": "Sourav Bhattacharya", "dob": "09-08-2011", "entries": [{"s": "Assamese", "m": 48}, {"s": "English", "m": 82}, {"s": "Mathematics", "m": 96}, {"s": "Science", "m": 86}, {"s": "Social Science", "m": 31}, {"s": "Hindi", "m": 55}]}, {"roll": 8, "name": "Mitali Hazarika", "dob": "26-08-2011", "entries": [{"s": "Assamese", "m": 49}, {"s": "English", "m": 23}, {"s": "Mathematics", "m": 81}, {"s": "Science", "m": 44}, {"s": "Social Science", "m": 81}, {"s": "Sanskrit", "m": 27}]}, {"roll": 9, "name": "Partha Mahanta", "dob": "30-10-2011", "entries": [{"s": "Assamese", "m": 79}, {"s": "English", "m": 83}, {"s": "Mathematics", "m": 69}, {"s": "Science", "m": 77}, {"s": "Social Science", "m": 64}, {"s": "Sanskrit", "m": 48}]}, {"roll": 10, "name": "Pallabi Kalita", "dob": "17-02-2011", "entries": [{"s": "Assamese", "m": 93}, {"s": "English", "m": 93}, {"s": "Mathematics", "m": 66}, {"s": "Science", "m": 90}, {"s": "Social Science", "m": 70}, {"s": "Hindi", "m": 71}]}]}, {"name": "Class 10", "students": [{"roll": 1, "name": "Karabi Sarmah", "dob": "06-06-2010", "entries": [{"s": "Assamese", "m": 97}, {"s": "English", "m": 59}, {"s": "Mathematics", "m": 62}, {"s": "Science", "m": 45}, {"s": "Social Science", "m": 88}, {"s": "Hindi", "m": 85}]}, {"roll": 2, "name": "Sangita Baruah", "dob": "16-01-2010", "entries": [{"s": "Assamese", "m": 54}, {"s": "English", "m": 45}, {"s": "Mathematics", "m": 97}, {"s": "Science", "m": 43}, {"s": "Social Science", "m": 59}, {"s": "Hindi", "m": 82}]}, {"roll": 3, "name": "Sourav Mahanta", "dob": "06-06-2010", "entries": [{"s": "Assamese", "m": 81}, {"s": "English", "m": 46}, {"s": "Mathematics", "m": 92}, {"s": "Science", "m": 52}, {"s": "Social Science", "m": 88}, {"s": "Adv. Mathematics", "m": 80}]}, {"roll": 4, "name": "Gitika Boro", "dob": "08-11-2010", "entries": [{"s": "Assamese", "m": 45}, {"s": "English", "m": 81}, {"s": "Mathematics", "m": 53}, {"s": "Science", "m": 45}, {"s": "Social Science", "m": 22}, {"s": "Sanskrit", "m": 41}]}, {"roll": 5, "name": "Anaya Baruah", "dob": "14-11-2010", "entries": [{"s": "Assamese", "m": 57}, {"s": "English", "m": 48}, {"s": "Mathematics", "m": 51}, {"s": "Science", "m": 76}, {"s": "Social Science", "m": 97}, {"s": "Sanskrit", "m": 64}]}, {"roll": 6, "name": "Mamoni Kalita", "dob": "11-12-2010", "entries": [{"s": "Assamese", "m": 42}, {"s": "English", "m": 65}, {"s": "Mathematics", "m": 92}, {"s": "Science", "m": 87}, {"s": "Social Science", "m": 89}, {"s": "Hindi", "m": 91}]}, {"roll": 7, "name": "Kangkan Choudhury", "dob": "25-02-2010", "entries": [{"s": "Assamese", "m": 41}, {"s": "English", "m": 63}, {"s": "Mathematics", "m": 93}, {"s": "Science", "m": 83}, {"s": "Social Science", "m": 98}, {"s": "Hindi", "m": 91}]}, {"roll": 8, "name": "Barnali Kakati", "dob": "27-09-2010", "entries": [{"s": "Assamese", "m": 44}, {"s": "English", "m": 46}, {"s": "Mathematics", "m": 87}, {"s": "Science", "m": 80}, {"s": "Social Science", "m": 98}, {"s": "Hindi", "m": 44}]}, {"roll": 9, "name": "Abhijit Medhi", "dob": "25-03-2010", "entries": [{"s": "Assamese", "m": 74}, {"s": "English", "m": 48}, {"s": "Mathematics", "m": 74}, {"s": "Science", "m": 81}, {"s": "Social Science", "m": 78}, {"s": "Adv. Mathematics", "m": 66}]}, {"roll": 10, "name": "Mintu Bhattacharya", "dob": "25-07-2010", "entries": [{"s": "Assamese", "m": 80}, {"s": "English", "m": 42}, {"s": "Mathematics", "m": 98}, {"s": "Science", "m": 65}, {"s": "Social Science", "m": 70}, {"s": "Hindi", "m": 56}]}]}]};
+let classes = [];
+const rclass = document.getElementById("rclass");
+function buildDropdown() {
+  rclass.innerHTML = '<option value="">Select class</option>';
+  classes.forEach(c => {
+    const o = document.createElement("option"); o.value = c.name; o.textContent = c.name; rclass.appendChild(o);
+  });
+}
+function useData(data) { classes = data.classes; buildDropdown(); }
+function xmlUnesc(s){ return s.replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"').replace(/&apos;/g,"'"); }
+function colIdx(letters){ let n=0; for(const ch of letters) n=n*26+(ch.charCodeAt(0)-64); return n-1; }
+async function loadFromXlsx() {
+  const res = await fetch(XLSX_URL, {cache:"no-store"});
+  if (!res.ok) throw new Error("http "+res.status);
+  const buf = await res.arrayBuffer();
+  const dv = new DataView(buf), u8 = new Uint8Array(buf), td = new TextDecoder();
+  const files = {};
+  let off = 0;
+  while (off + 30 <= u8.length) {
+    if (dv.getUint32(off, true) !== 0x04034b50) break;
+    const method = dv.getUint16(off+8, true);
+    const csize = dv.getUint32(off+18, true);
+    const fnLen = dv.getUint16(off+26, true), exLen = dv.getUint16(off+28, true);
+    const name = td.decode(u8.slice(off+30, off+30+fnLen));
+    const start = off+30+fnLen+exLen;
+    files[name] = {method: method, data: u8.slice(start, start+csize)};
+    off = start + csize;
+  }
+  async function readText(name) {
+    const f = files[name]; if (!f) throw new Error("missing "+name);
+    if (f.method === 0) return td.decode(f.data);
+    if (f.method === 8) {
+      const ds = new DecompressionStream("deflate");
+      return await new Response(new Blob([f.data]).stream().pipeThrough(ds)).text();
+    }
+    throw new Error("bad compression");
+  }
+  const sh = await readText("xl/worksheets/sheet1.xml");
+  const rowRe = /<row[^>]*>([\s\S]*?)<\/row>/g;
+  const cellRe = /<c r="([A-Z]+)\d+"[^>]*>(?:<is><t>([^<]*)<\/t><\/is>|<v>([^<]*)<\/v>)/g;
+  function parseRow(inner) {
+    const rec = {};
+    let cm;
+    cellRe.lastIndex = 0;
+    while ((cm = cellRe.exec(inner))) rec[colIdx(cm[1])] = cm[2] !== undefined ? xmlUnesc(cm[2]) : parseFloat(cm[3]);
+    return rec;
+  }
+  const all = []; let rm;
+  rowRe.lastIndex = 0;
+  while ((rm = rowRe.exec(sh))) all.push(parseRow(rm[1]));
+  const hrec = all[0];
+  const rows = all.slice(1).filter(r => r[0] !== undefined && r[0] !== "Class" && r[1] !== undefined);
+  if (!rows.length) throw new Error("no data rows");
+  const subjCols = Object.keys(hrec).map(Number).filter(k => k >= 4).sort((a,b) => a-b);
+  const order = [], byClass = {};
+  rows.forEach(r => { const cn = r[0]; if (!byClass[cn]) { byClass[cn] = []; order.push(cn); } byClass[cn].push(r); });
+  const isElec = ci => String(hrec[ci]).indexOf("Elective:") === 0;
+  const elecName = ci => String(hrec[ci]).slice(9).trim();
+  return {classes: order.map(cn => {
+    const rs = byClass[cn];
+    const reg = subjCols.filter(ci => !isElec(ci) && rs.some(r => typeof r[ci] === "number"));
+    const elec = subjCols.filter(isElec);
+    return {
+      name: cn,
+      students: rs.map(r => {
+        const entries = reg.filter(ci => typeof r[ci] === "number")
+          .map(ci => ({s: String(hrec[ci]), m: r[ci]}));
+        elec.forEach(ci => { if (typeof r[ci] === "number") entries.push({s: elecName(ci), m: r[ci]}); });
+        return {roll: r[1], name: String(r[2]), dob: String(r[3] || ""), entries: entries};
+      })
+    };
+  })};
+}
+(async () => {
+  try {
+    if (typeof DecompressionStream === "undefined") throw new Error("no DecompressionStream");
+    useData(await loadFromXlsx());
+  } catch (e) {
+    useData(FALLBACK_DATA);
+  }
+})();
+
+
+/* ---------- lookup ---------- */
+let curCls = null, curSt = null;
+const rform = document.getElementById("rform"), rout = document.getElementById("rout"), rerr = document.getElementById("rerr");
+function showErr(msg) { rerr.textContent = msg; rerr.hidden = false; }
+rform.addEventListener("submit", e => {
+  e.preventDefault();
+  rerr.hidden = true;
+  const clsName = rclass.value, roll = parseInt(document.getElementById("rroll").value, 10);
+  const dobIn = document.getElementById("rdob").value;
+  if (!clsName) return showErr("Please select a class.");
+  if (!roll || roll < 1) return showErr("Please enter a valid roll number.");
+  if (!dobIn) return showErr("Please enter your date of birth.");
+  const cls = classes.find(c => c.name === clsName);
+  const st = cls && cls.students.find(x => x.roll === roll);
+  const p = dobIn.split("-"), dobNorm = p[2] + "-" + p[1] + "-" + p[0];
+  if (!st || st.dob !== dobNorm) return showErr("Roll number and date of birth do not match our records. Check the details and try again.");
+  const s = st;
+  curCls = cls; curSt = s;
+  renderResult(cls, s);
+  rform.hidden = true; rout.hidden = false;
+  window.scrollTo({top: 0, behavior: "smooth"});
+});
+function renderResult(cls, s) {
+  document.getElementById("rname").textContent = s.name;
+  document.getElementById("rmeta").textContent = cls.name + "  ·  Roll No. " + s.roll;
+  const tb = document.getElementById("rtbody"); tb.innerHTML = "";
+  let total = 0, failed = false;
+  s.entries.forEach(e => {
+    const m = e.m, ok = m !== null && m >= 33;
+    total += (m || 0); if (!ok) failed = true;
+    const tr = document.createElement("tr");
+    tr.innerHTML = "<td>" + e.s + "</td><td class='m'>" + (m === null ? "-" : m + " / 100") + "</td><td class='m " + (ok ? "pass" : "fail") + "'>" + (ok ? "Pass" : "Fail") + "</td>";
+    tb.appendChild(tr);
+  });
+  const max = s.entries.length * 100, pct = total / max * 100;
+  document.getElementById("rmax").textContent = max;
+  document.getElementById("rtot").textContent = total;
+  document.getElementById("rpct").textContent = pct.toFixed(2) + "%";
+  const dv = document.getElementById("rdiv");
+  let div, dc;
+  if (failed || pct < 33) { div = "Fail"; dc = "fail"; }
+  else if (pct >= 60) { div = "First Division"; dc = "pass"; }
+  else if (pct >= 45) { div = "Second Division"; dc = "pass"; }
+  else { div = "Third Division"; dc = "pass"; }
+  dv.textContent = div; dv.className = "rdiv " + dc;
+}
+document.getElementById("rback").addEventListener("click", () => {
+  rout.hidden = true; rform.hidden = false;
+  document.getElementById("rdob").value = "";
+  window.scrollTo({top: 0, behavior: "smooth"});
+});
+
+/* ---------- download result as image ---------- */
+
+function pdfMarksheet() {
+  if (!curCls || !curSt) return;
+  const P = [];
+  const navy = [0.09,0.20,0.37], ink = [0.10,0.10,0.10], muted = [0.38,0.41,0.46],
+        green = [0.10,0.48,0.20], red = [0.66,0.18,0.18], sblue = [0.10,0.34,0.66],
+        rule = [0.78,0.76,0.70], hfill = [0.949,0.945,0.929];
+  const Y = v => 842 - v;
+  const esc = t => String(t).replace(/\\/g,"\\\\").replace(/\(/g,"\\(").replace(/\)/g,"\\)").replace(/[^\x20-\x7e]/g,"?");
+  function T(x, y, str, font, size, c, rot) {
+    rot = rot || 0;
+    const cs = Math.cos(rot), sn = Math.sin(rot);
+    P.push(c[0].toFixed(3)+" "+c[1].toFixed(3)+" "+c[2].toFixed(3)+" rg");
+    P.push("BT /"+font+" "+size+" Tf "+cs.toFixed(4)+" "+sn.toFixed(4)+" "+(-sn).toFixed(4)+" "+cs.toFixed(4)+" "+x.toFixed(2)+" "+Y(y).toFixed(2)+" Tm ("+esc(str)+") Tj ET");
+  }
+  const wEst = (str, size, bold) => String(str).length * size * (bold ? 0.60 : 0.55);
+  const TC = (cx, y, str, font, size, c) => T(cx - wEst(str, size, font === "F2") / 2, y, str, font, size, c);
+  function line(x1, y1, x2, y2, w, c) {
+    P.push(c[0].toFixed(3)+" "+c[1].toFixed(3)+" "+c[2].toFixed(3)+" RG "+w+" w "+x1.toFixed(2)+" "+Y(y1).toFixed(2)+" m "+x2.toFixed(2)+" "+Y(y2).toFixed(2)+" l S");
+  }
+  function fillRect(x, y, w, h, c) {
+    P.push(c[0].toFixed(3)+" "+c[1].toFixed(3)+" "+c[2].toFixed(3)+" rg "+x.toFixed(2)+" "+Y(y+h).toFixed(2)+" "+w.toFixed(2)+" "+h.toFixed(2)+" re f");
+  }
+  // Letterhead
+  TC(297.5, 54, "Shankardev Shishu Niketan, Bhuragaon", "F2", 20, navy);
+  TC(297.5, 80, "Bhuragaon, Morigaon, Assam - Estd. 2004", "F1", 10.5, muted);
+  line(50, 96, 545, 96, 1.4, navy);
+  TC(297.5, 122, "MARKSHEET", "F2", 17, navy);
+  TC(297.5, 144, "Annual Examination 2026", "F1", 11, ink);
+  // Student
+  let y = 176;
+  T(50, y, "Name:", "F2", 11.5, ink);
+  T(50 + wEst("Name: ", 11.5, true), y, curSt.name, "F1", 11.5, ink);
+  const rs = "Roll No: " + curSt.roll;
+  T(545 - wEst(rs, 11.5, false), y, rs, "F1", 11.5, ink);
+  y += 24;
+  T(50, y, "Class:", "F2", 11.5, ink);
+  T(50 + wEst("Class: ", 11.5, true), y, curCls.name, "F1", 11.5, ink);
+  // Marks table
+  y += 36;
+  const c0 = 50, c1 = 330, c2 = 440, c3 = 545, rh = 24, n = curSt.entries.length;
+  fillRect(c0, y, c3-c0, rh, hfill);
+  T(c0+10, y+8.5, "SUBJECT", "F2", 10.5, muted);
+  TC((c1+c2)/2, y+8.5, "MARKS", "F2", 10.5, muted);
+  TC((c2+c3)/2, y+8.5, "STATUS", "F2", 10.5, muted);
+  line(c0, y, c3, y, 1, rule); line(c0, y+rh+n*rh, c3, y+rh+n*rh, 1, rule);
+  line(c0, y, c0, y+rh+n*rh, 1, rule); line(c3, y, c3, y+rh+n*rh, 1, rule);
+  line(c1, y, c1, y+rh+n*rh, 0.8, rule); line(c2, y, c2, y+rh+n*rh, 0.8, rule);
+  for (let i = 1; i <= n; i++) line(c0, y+rh*i, c3, y+rh*i, 0.8, rule);
+  let total = 0, allPass = true;
+  curSt.entries.forEach((e, i) => {
+    const m = e.m, ok = m !== null && m >= 33, ry = y + rh + i*rh;
+    total += (m || 0); if (!ok) allPass = false;
+    T(c0+10, ry+8, e.s, "F1", 11, ink);
+    TC((c1+c2)/2, ry+8, (m === null ? "-" : m + " / 100"), "F1", 11, ink);
+    TC((c2+c3)/2, ry+8, ok ? "Pass" : "Fail", "F2", 11, ok ? green : red);
+  });
+  const max = n * 100, pct = total / max * 100;
+  let ty = y + rh*(n+1) + 30;
+  T(60, ty, "Total", "F2", 12, ink);
+  TC((c1+c2)/2, ty, total + " / " + max, "F2", 12, ink);
+  ty += 24;
+  T(60, ty, "Percentage", "F2", 12, ink);
+  TC((c1+c2)/2, ty, pct.toFixed(2) + "%", "F2", 12, ink);
+  ty += 36;
+  const div = !allPass ? "Fail" : pct >= 60 ? "First Division" : pct >= 45 ? "Second Division" : "Third Division";
+  TC(297.5, ty, div.toUpperCase(), "F2", 15, div === "Fail" ? red : green);
+  // Footer
+  const dstr = new Date().toLocaleDateString("en-IN", {day:"numeric", month:"long", year:"numeric"});
+  TC(297.5, ty+72, "Generated on " + dstr, "F1", 9, muted);
+  TC(297.5, ty+88, "For corrections, contact the school office.", "F1", 9, muted);
+  // Assemble PDF
+  const stream = P.join("\n");
+  const objs = [
+    "<< /Type /Catalog /Pages 2 0 R >>",
+    "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+    "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>",
+    "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
+    "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>",
+    "<< /Length " + (stream.length + 1) + " >>\nstream\n" + stream + "\nendstream"
+  ];
+  let pdf = "%PDF-1.4\n";
+  const offs = [0];
+  for (let i = 0; i < 6; i++) { offs.push(pdf.length); pdf += (i+1) + " 0 obj\n" + objs[i] + "\nendobj\n"; }
+  const xref = pdf.length;
+  pdf += "xref\n0 7\n0000000000 65535 f \n";
+  for (let i = 1; i <= 6; i++) pdf += String(offs[i]).padStart(10, "0") + " 00000 n \n";
+  pdf += "trailer\n<< /Size 7 /Root 1 0 R >>\nstartxref\n" + xref + "\n%%EOF";
+  const blob = new Blob([new TextEncoder().encode(pdf)], {type: "application/pdf"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "Result_" + curCls.name.replace(/\s+/g,"") + "_Roll" + curSt.roll + "_" + curSt.name.replace(/\s+/g,"_") + ".pdf";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+document.getElementById("rdl").addEventListener("click", pdfMarksheet);
+
+
+var menuBtn=document.getElementById("menuBtn"),rnav=document.getElementById("rnav");
+menuBtn.onclick=function(){
+  menuBtn.classList.add("anim");
+  var open=rnav.classList.toggle("open");
+  menuBtn.classList.toggle("open",open);
+  if(open){
+    var r=menuBtn.getBoundingClientRect();
+    rnav.style.setProperty("--cx",(r.left+r.width/2)+"px");
+    rnav.style.setProperty("--cy",(r.top+r.height/2)+"px");
+    document.body.style.overflow="hidden";
+  }else{document.body.style.overflow="";}
+};
+rnav.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){rnav.classList.remove("open");menuBtn.classList.remove("open");document.body.style.overflow="";});});
+</script>
+</body>
+</html>
