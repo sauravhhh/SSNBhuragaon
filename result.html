@@ -42,12 +42,6 @@ td.m,th.m{text-align:center;}
 .rdiv.fail{color:#a32b2b;}
 .rdiv.pass{color:#1e7e34;}
 .note{text-align:center;color:var(--muted);font-size:12px;margin-top:18px;}
-.signrow{display:flex;justify-content:space-between;align-items:flex-end;margin-top:24px;gap:16px;}
-.stamp{width:112px;height:112px;transform:rotate(-8deg);opacity:.92;flex-shrink:0;}
-.signblock{text-align:center;padding-bottom:6px;}
-.signline{width:180px;max-width:40vw;border-bottom:2px solid var(--ink);height:36px;}
-.signcap{font-size:13px;font-weight:700;color:var(--ink);margin-top:6px;line-height:1.5;}
-.signcap span{font-weight:400;color:var(--muted);font-size:12px;}
 </style>
 </head>
 <body>
@@ -85,23 +79,6 @@ td.m,th.m{text-align:center;}
     <div class="rtotal"><span>Total (out of <span id="rmax"></span>)</span><b id="rtot"></b></div>
     <div class="rtotal"><span>Percentage</span><b id="rpct"></b></div>
     <div class="rdiv" id="rdiv"></div>
-    <div class="signrow">
-      <svg class="stamp" viewBox="0 0 120 120" aria-label="School stamp">
-        <defs>
-          <path id="stTop" d="M16,60 a44,44 0 1,1 88,0" fill="none"/>
-          <path id="stBot" d="M16,60 a44,44 0 1,0 88,0" fill="none"/>
-        </defs>
-        <circle cx="60" cy="60" r="56" fill="none" stroke="#1a56a8" stroke-width="3"/>
-        <circle cx="60" cy="60" r="48" fill="none" stroke="#1a56a8" stroke-width="1.5"/>
-        <text font-size="11" font-weight="bold" fill="#1a56a8" font-family="sans-serif" letter-spacing="1"><textPath href="#stTop" startOffset="50%" text-anchor="middle">SHANKARDEV SHISHU NIKETAN</textPath></text>
-        <text font-size="10.5" font-weight="bold" fill="#1a56a8" font-family="sans-serif" letter-spacing="1"><textPath href="#stBot" startOffset="50%" text-anchor="middle">BHURAGAON &#8226; MORIGAON</textPath></text>
-        <text x="60" y="59" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a56a8" font-family="sans-serif">ESTD 2004</text>
-        <text x="60" y="75" text-anchor="middle" font-size="11" fill="#1a56a8">&#9733;</text>
-      </svg>
-      <div class="signblock">
-        <div class="signline"></div>
-        <div class="signcap">Principal<br><span>Shankardev Shishu Niketan, Bhuragaon</span></div>
-      </div>
     </div>
     <button class="btn" id="rdl" type="button" style="margin-top:10px">Download PDF</button>
     <button class="btn ghost" id="rback" type="button">Check another result</button>
@@ -291,25 +268,6 @@ function pdfMarksheet() {
   function fillRect(x, y, w, h, c) {
     P.push(c[0].toFixed(3)+" "+c[1].toFixed(3)+" "+c[2].toFixed(3)+" rg "+x.toFixed(2)+" "+Y(y+h).toFixed(2)+" "+w.toFixed(2)+" "+h.toFixed(2)+" re f");
   }
-  function circle(cx, cy, r, w, c) {
-    const k = 0.5522847498 * r, f = n => n.toFixed(2);
-    P.push(c[0].toFixed(3)+" "+c[1].toFixed(3)+" "+c[2].toFixed(3)+" RG "+w+" w");
-    P.push(f(cx-r)+" "+Y(cy).toFixed(2)+" m "+
-      f(cx-r)+" "+Y(cy+k).toFixed(2)+" "+f(cx-k)+" "+Y(cy+r).toFixed(2)+" "+f(cx)+" "+Y(cy+r).toFixed(2)+" c "+
-      f(cx+k)+" "+Y(cy+r).toFixed(2)+" "+f(cx+r)+" "+Y(cy+k).toFixed(2)+" "+f(cx+r)+" "+Y(cy).toFixed(2)+" c "+
-      f(cx+r)+" "+Y(cy-k).toFixed(2)+" "+f(cx+k)+" "+Y(cy-r).toFixed(2)+" "+f(cx)+" "+Y(cy-r).toFixed(2)+" c "+
-      f(cx-k)+" "+Y(cy-r).toFixed(2)+" "+f(cx-r)+" "+Y(cy-k).toFixed(2)+" "+f(cx-r)+" "+Y(cy).toFixed(2)+" c S");
-  }
-  function arcText(cxL, cyL, rT, str, top, size) {
-    const n = str.length;
-    const spread = Math.min(Math.PI*1.05, (n * size * 0.60) / rT);
-    for (let i = 0; i < n; i++) {
-      let a, rl;
-      if (top) { a = -Math.PI/2 + (i/(n-1)-0.5)*spread; rl = a + Math.PI/2; }
-      else { a = Math.PI/2 + (0.5-i/(n-1))*spread; rl = a - Math.PI/2; }
-      T(cxL + rT*Math.cos(a), cyL + rT*Math.sin(a), str[i], "F2", size, sblue, -rl);
-    }
-  }
   // Letterhead
   TC(297.5, 54, "Shankardev Shishu Niketan, Bhuragaon", "F2", 20, navy);
   TC(297.5, 80, "Bhuragaon, Morigaon, Assam - Estd. 2004", "F1", 10.5, muted);
@@ -354,24 +312,10 @@ function pdfMarksheet() {
   ty += 36;
   const div = !allPass ? "Fail" : pct >= 60 ? "First Division" : pct >= 45 ? "Second Division" : "Third Division";
   TC(297.5, ty, div.toUpperCase(), "F2", 15, div === "Fail" ? red : green);
-  // Stamp + signature
-  ty += 84;
-  const scx = 150, scy = ty, R = 54;
-  P.push("q 1 0 0 1 "+scx+" "+Y(scy).toFixed(2)+" cm 0.9903 -0.1395 0.1395 0.9903 0 0 cm 1 0 0 1 "+(-scx)+" "+(-Y(scy)).toFixed(2)+" cm");
-  circle(scx, scy, R, 2.6, sblue);
-  circle(scx, scy, R-8, 1.2, sblue);
-  arcText(scx, scy, R-12, "SHANKARDEV SHISHU NIKETAN", true, 8);
-  arcText(scx, scy, R-12, "BHURAGAON - MORIGAON", false, 8);
-  TC(scx, scy-5, "ESTD 2004", "F2", 11, sblue);
-  P.push("Q");
-  const sx0 = 368, sx1 = 545, sly = ty + 64;
-  line(sx0, sly, sx1, sly, 1.2, ink);
-  TC((sx0+sx1)/2, sly+24, "Principal", "F1", 11, ink);
-  TC((sx0+sx1)/2, sly+40, "Shankardev Shishu Niketan, Bhuragaon", "F1", 8.5, muted);
   // Footer
   const dstr = new Date().toLocaleDateString("en-IN", {day:"numeric", month:"long", year:"numeric"});
-  TC(297.5, ty+168, "Generated on " + dstr, "F1", 9, muted);
-  TC(297.5, ty+184, "For corrections, contact the school office.", "F1", 9, muted);
+  TC(297.5, ty+72, "Generated on " + dstr, "F1", 9, muted);
+  TC(297.5, ty+88, "For corrections, contact the school office.", "F1", 9, muted);
   // Assemble PDF
   const stream = P.join("\n");
   const objs = [
