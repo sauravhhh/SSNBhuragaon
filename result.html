@@ -41,6 +41,8 @@ td.m,th.m{text-align:center;}
 .rdiv.pass{color:#1e7e34;}
 .note{text-align:center;color:var(--muted);font-size:12px;margin-top:18px;}
 
+.caprow{display:flex;gap:10px;align-items:center;margin-top:6px;}
+#capRefresh{width:44px;height:44px;flex-shrink:0;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:20px;cursor:pointer;color:var(--navy);}
 /* site menu button + circular reveal nav, ported from styles.css */
 #menuBtn{display:block;background:none;border:1px solid var(--line);border-radius:8px;width:42px;height:36px;cursor:pointer;position:relative;z-index:2;margin-left:auto;flex-shrink:0;}
 #menuBtn span{position:absolute;left:10px;right:10px;height:2px;background:var(--navy);border-radius:2px;}
@@ -89,7 +91,7 @@ td.m,th.m{text-align:center;}
   <a href="contact.html">Contact</a>
 </nav>
 <main class="wrap">
-  <h1>Student Login</h1>
+  <h1>Check Result</h1>
   <p class="sub">Annual Examination 2026</p>
   <form id="rform" class="card" autocomplete="off">
     <label>Class
@@ -98,11 +100,15 @@ td.m,th.m{text-align:center;}
     <label>Roll No
       <input id="rroll" inputmode="numeric" pattern="[0-9]*" placeholder="e.g. 5">
     </label>
-    <label style="margin-bottom:0">Date of Birth
-      <input id="rdob" type="date">
+    <label style="margin-bottom:0">Security check &mdash; type the number shown
+      <div class="caprow">
+        <canvas id="cap" width="150" height="50"></canvas>
+        <button type="button" id="capRefresh" aria-label="Get a new number">&#8635;</button>
+      </div>
+      <input id="rcap" inputmode="numeric" autocomplete="off" placeholder="Enter the number" style="margin-top:10px">
     </label>
     <div id="rerr" class="err" hidden></div>
-    <button class="btn" type="submit" style="margin-top:16px">Log In</button>
+    <button class="btn" type="submit" style="margin-top:16px">View Result</button>
   </form>
   <div id="rout" class="card result" hidden>
     <h2 id="rname"></h2>
@@ -116,7 +122,7 @@ td.m,th.m{text-align:center;}
     <div class="rdiv" id="rdiv"></div>
     </div>
     <button class="btn" id="rdl" type="button" style="margin-top:10px">Download PDF</button>
-    <button class="btn ghost" id="rback" type="button">Log Out</button>
+    <button class="btn ghost" id="rback" type="button">Check another result</button>
   </div>
   <p class="note">For any correction, contact the school office.</p>
 </main>
@@ -207,6 +213,36 @@ async function loadFromXlsx() {
 })();
 
 
+/* ---------- number captcha ---------- */
+let capCode = "";
+function drawCaptcha() {
+  const c = document.getElementById("cap"), x = c.getContext("2d");
+  capCode = String(Math.floor(10000 + Math.random() * 90000));
+  x.fillStyle = "#f4f1e8"; x.fillRect(0, 0, 150, 50);
+  x.font = "bold 30px Georgia,serif"; x.textBaseline = "middle";
+  for (let i = 0; i < 5; i++) {
+    x.save();
+    x.translate(24 + i * 26, 26 + (Math.random() * 8 - 4));
+    x.rotate(Math.random() * 0.5 - 0.25);
+    x.fillStyle = "#16345f";
+    x.fillText(capCode[i], -9, 0);
+    x.restore();
+  }
+  x.strokeStyle = "rgba(22,52,95,.28)"; x.lineWidth = 1;
+  for (let i = 0; i < 3; i++) {
+    x.beginPath();
+    x.moveTo(Math.random() * 150, Math.random() * 50);
+    x.quadraticCurveTo(Math.random() * 150, Math.random() * 50, Math.random() * 150, Math.random() * 50);
+    x.stroke();
+  }
+  x.fillStyle = "rgba(22,52,95,.20)";
+  for (let i = 0; i < 45; i++) x.fillRect(Math.random() * 150, Math.random() * 50, 1.6, 1.6);
+}
+document.getElementById("capRefresh").addEventListener("click", () => {
+  drawCaptcha(); document.getElementById("rcap").value = ""; document.getElementById("rcap").focus();
+});
+drawCaptcha();
+
 /* ---------- lookup ---------- */
 let curCls = null, curSt = null;
 const rform = document.getElementById("rform"), rout = document.getElementById("rout"), rerr = document.getElementById("rerr");
@@ -215,15 +251,13 @@ rform.addEventListener("submit", e => {
   e.preventDefault();
   rerr.hidden = true;
   const clsName = rclass.value, roll = parseInt(document.getElementById("rroll").value, 10);
-  const dobIn = document.getElementById("rdob").value;
+  const cap = document.getElementById("rcap").value.trim();
   if (!clsName) return showErr("Please select a class.");
   if (!roll || roll < 1) return showErr("Please enter a valid roll number.");
-  if (!dobIn) return showErr("Please enter your date of birth.");
+  if (cap !== capCode) { drawCaptcha(); document.getElementById("rcap").value = ""; return showErr("Wrong security number. A new number has been generated \u2014 try again."); }
   const cls = classes.find(c => c.name === clsName);
-  const st = cls && cls.students.find(x => x.roll === roll);
-  const p = dobIn.split("-"), dobNorm = p[2] + "-" + p[1] + "-" + p[0];
-  if (!st || st.dob !== dobNorm) return showErr("Roll number and date of birth do not match our records. Check the details and try again.");
-  const s = st;
+  const s = cls && cls.students.find(s => s.roll === roll);
+  if (!s) return showErr("No result found for " + clsName + ", roll no. " + roll + ". Check the details and try again.");
   curCls = cls; curSt = s;
   renderResult(cls, s);
   rform.hidden = true; rout.hidden = false;
@@ -255,7 +289,7 @@ function renderResult(cls, s) {
 }
 document.getElementById("rback").addEventListener("click", () => {
   rout.hidden = true; rform.hidden = false;
-  document.getElementById("rdob").value = "";
+  document.getElementById("rcap").value = ""; drawCaptcha();
   window.scrollTo({top: 0, behavior: "smooth"});
 });
 
