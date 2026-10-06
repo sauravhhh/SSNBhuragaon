@@ -39,6 +39,8 @@
   <p class="sub">Announcements, exam schedules and school news — newest first.</p>
 </div>
 
+<div class="ticker" aria-label="Latest notices"><div class="ticker-track" id="tickerTrack"><span>Loading latest notices…</span></div></div>
+
 <section>
   <div class="wrap">
     <div id="noticeList"><p style="color:var(--muted)">Loading notices…</p></div>
@@ -105,7 +107,11 @@ fetch("notices.json").then(r=>r.json()).then(items=>{
       <div class="ndate">${fmtDate(n.date)}</div>
       <h3>${esc(n.title)}</h3>
       <p>${esc(n.body)}</p>
+      ${n.file?`<p><a class="pdflink" href="${esc(n.file)}" target="_blank" rel="noopener">Download PDF</a></p>`:""}
     </div>`).join("");
+  const track = document.getElementById("tickerTrack");
+  const latest = items.slice(0,4).map(n=>`<span class="titem">${esc(n.title)}</span>`).join('<span class="tdot">•</span>');
+  track.innerHTML = `<span>${latest}</span><span aria-hidden="true">${latest}</span>`;
 }).catch(()=>{
   document.getElementById("noticeList").innerHTML='<p style="color:var(--muted)">Could not load notices. Please check your connection.</p>';
 });
