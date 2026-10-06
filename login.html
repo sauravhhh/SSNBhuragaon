@@ -118,7 +118,6 @@ td.m,th.m{text-align:center;}
     <div class="rtotal"><span>Total (out of <span id="rmax"></span>)</span><b id="rtot"></b></div>
     <div class="rtotal"><span>Percentage</span><b id="rpct"></b></div>
     <div class="rdiv" id="rdiv"></div>
-    <button class="btn" id="rdl" type="button" style="margin-top:10px">Download PDF</button>
     <button class="btn ghost" id="rbackbtn" type="button">Back</button>
   </div>
   <p class="note">For any correction, contact the school office.</p>
@@ -281,103 +280,6 @@ function renderResult(cls, s) {
   dv.textContent = div; dv.className = "rdiv " + dc;
 }
 
-/* ---------- download result as image ---------- */
-
-function pdfMarksheet() {
-  if (!curCls || !curSt) return;
-  const P = [];
-  const navy = [0.09,0.20,0.37], ink = [0.10,0.10,0.10], muted = [0.38,0.41,0.46],
-        green = [0.10,0.48,0.20], red = [0.66,0.18,0.18], sblue = [0.10,0.34,0.66],
-        rule = [0.78,0.76,0.70], hfill = [0.949,0.945,0.929];
-  const Y = v => 842 - v;
-  const esc = t => String(t).replace(/\\/g,"\\\\").replace(/\(/g,"\\(").replace(/\)/g,"\\)").replace(/[^\x20-\x7e]/g,"?");
-  function T(x, y, str, font, size, c, rot) {
-    rot = rot || 0;
-    const cs = Math.cos(rot), sn = Math.sin(rot);
-    P.push(c[0].toFixed(3)+" "+c[1].toFixed(3)+" "+c[2].toFixed(3)+" rg");
-    P.push("BT /"+font+" "+size+" Tf "+cs.toFixed(4)+" "+sn.toFixed(4)+" "+(-sn).toFixed(4)+" "+cs.toFixed(4)+" "+x.toFixed(2)+" "+Y(y).toFixed(2)+" Tm ("+esc(str)+") Tj ET");
-  }
-  const wEst = (str, size, bold) => String(str).length * size * (bold ? 0.60 : 0.55);
-  const TC = (cx, y, str, font, size, c) => T(cx - wEst(str, size, font === "F2") / 2, y, str, font, size, c);
-  function line(x1, y1, x2, y2, w, c) {
-    P.push(c[0].toFixed(3)+" "+c[1].toFixed(3)+" "+c[2].toFixed(3)+" RG "+w+" w "+x1.toFixed(2)+" "+Y(y1).toFixed(2)+" m "+x2.toFixed(2)+" "+Y(y2).toFixed(2)+" l S");
-  }
-  function fillRect(x, y, w, h, c) {
-    P.push(c[0].toFixed(3)+" "+c[1].toFixed(3)+" "+c[2].toFixed(3)+" rg "+x.toFixed(2)+" "+Y(y+h).toFixed(2)+" "+w.toFixed(2)+" "+h.toFixed(2)+" re f");
-  }
-  // Letterhead
-  TC(297.5, 54, "Shankardev Shishu Niketan, Bhuragaon", "F2", 20, navy);
-  TC(297.5, 80, "Bhuragaon, Morigaon, Assam - Estd. 2004", "F1", 10.5, muted);
-  line(50, 96, 545, 96, 1.4, navy);
-  TC(297.5, 122, "MARKSHEET", "F2", 17, navy);
-  TC(297.5, 144, "Annual Examination 2026", "F1", 11, ink);
-  // Student
-  let y = 176;
-  T(50, y, "Name:", "F2", 11.5, ink);
-  T(50 + wEst("Name: ", 11.5, true), y, curSt.name, "F1", 11.5, ink);
-  const rs = "Roll No: " + curSt.roll;
-  T(545 - wEst(rs, 11.5, false), y, rs, "F1", 11.5, ink);
-  y += 24;
-  T(50, y, "Class:", "F2", 11.5, ink);
-  T(50 + wEst("Class: ", 11.5, true), y, curCls.name, "F1", 11.5, ink);
-  // Marks table
-  y += 36;
-  const c0 = 50, c1 = 330, c2 = 440, c3 = 545, rh = 24, n = curSt.entries.length;
-  fillRect(c0, y, c3-c0, rh, hfill);
-  T(c0+10, y+8.5, "SUBJECT", "F2", 10.5, muted);
-  TC((c1+c2)/2, y+8.5, "MARKS", "F2", 10.5, muted);
-  TC((c2+c3)/2, y+8.5, "STATUS", "F2", 10.5, muted);
-  line(c0, y, c3, y, 1, rule); line(c0, y+rh+n*rh, c3, y+rh+n*rh, 1, rule);
-  line(c0, y, c0, y+rh+n*rh, 1, rule); line(c3, y, c3, y+rh+n*rh, 1, rule);
-  line(c1, y, c1, y+rh+n*rh, 0.8, rule); line(c2, y, c2, y+rh+n*rh, 0.8, rule);
-  for (let i = 1; i <= n; i++) line(c0, y+rh*i, c3, y+rh*i, 0.8, rule);
-  let total = 0, allPass = true;
-  curSt.entries.forEach((e, i) => {
-    const m = e.m, ok = m !== null && m >= 33, ry = y + rh + i*rh;
-    total += (m || 0); if (!ok) allPass = false;
-    T(c0+10, ry+8, e.s, "F1", 11, ink);
-    TC((c1+c2)/2, ry+8, (m === null ? "-" : m + " / 100"), "F1", 11, ink);
-    TC((c2+c3)/2, ry+8, ok ? "Pass" : "Fail", "F2", 11, ok ? green : red);
-  });
-  const max = n * 100, pct = total / max * 100;
-  let ty = y + rh*(n+1) + 30;
-  T(60, ty, "Total", "F2", 12, ink);
-  TC((c1+c2)/2, ty, total + " / " + max, "F2", 12, ink);
-  ty += 24;
-  T(60, ty, "Percentage", "F2", 12, ink);
-  TC((c1+c2)/2, ty, pct.toFixed(2) + "%", "F2", 12, ink);
-  ty += 36;
-  const div = !allPass ? "Fail" : pct >= 60 ? "First Division" : pct >= 45 ? "Second Division" : "Third Division";
-  TC(297.5, ty, div.toUpperCase(), "F2", 15, div === "Fail" ? red : green);
-  // Footer
-  const dstr = new Date().toLocaleDateString("en-IN", {day:"numeric", month:"long", year:"numeric"});
-  TC(297.5, ty+72, "Generated on " + dstr, "F1", 9, muted);
-  TC(297.5, ty+88, "For corrections, contact the school office.", "F1", 9, muted);
-  // Assemble PDF
-  const stream = P.join("\n");
-  const objs = [
-    "<< /Type /Catalog /Pages 2 0 R >>",
-    "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
-    "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>",
-    "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
-    "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>",
-    "<< /Length " + (stream.length + 1) + " >>\nstream\n" + stream + "\nendstream"
-  ];
-  let pdf = "%PDF-1.4\n";
-  const offs = [0];
-  for (let i = 0; i < 6; i++) { offs.push(pdf.length); pdf += (i+1) + " 0 obj\n" + objs[i] + "\nendobj\n"; }
-  const xref = pdf.length;
-  pdf += "xref\n0 7\n0000000000 65535 f \n";
-  for (let i = 1; i <= 6; i++) pdf += String(offs[i]).padStart(10, "0") + " 00000 n \n";
-  pdf += "trailer\n<< /Size 7 /Root 1 0 R >>\nstartxref\n" + xref + "\n%%EOF";
-  const blob = new Blob([new TextEncoder().encode(pdf)], {type: "application/pdf"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "Result_" + curCls.name.replace(/\s+/g,"") + "_Roll" + curSt.roll + "_" + curSt.name.replace(/\s+/g,"_") + ".pdf";
-  document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
-}
-document.getElementById("rdl").addEventListener("click", pdfMarksheet);
 
 
 var menuBtn=document.getElementById("menuBtn"),rnav=document.getElementById("rnav");
