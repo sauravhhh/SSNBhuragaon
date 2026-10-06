@@ -79,6 +79,7 @@ td.m,th.m{text-align:center;}
     <div class="rtotal"><span>Total (out of <span id="rmax"></span>)</span><b id="rtot"></b></div>
     <div class="rtotal"><span>Percentage</span><b id="rpct"></b></div>
     <div class="rdiv" id="rdiv"></div>
+    <button class="btn" id="rdl" type="button" style="margin-top:10px">Download Result</button>
     <button class="btn ghost" id="rback" type="button">Check another result</button>
   </div>
   <p class="note">For any correction, contact the school office.</p>
@@ -124,6 +125,7 @@ document.getElementById("capRefresh").addEventListener("click", () => {
 drawCaptcha();
 
 /* ---------- lookup ---------- */
+let curCls = null, curSt = null;
 const rform = document.getElementById("rform"), rout = document.getElementById("rout"), rerr = document.getElementById("rerr");
 function showErr(msg) { rerr.textContent = msg; rerr.hidden = false; }
 rform.addEventListener("submit", e => {
@@ -137,6 +139,7 @@ rform.addEventListener("submit", e => {
   const cls = classes.find(c => c.name === clsName);
   const s = cls && cls.students.find(s => s.roll === roll);
   if (!s) return showErr("No result found for " + clsName + ", roll no. " + roll + ". Check the details and try again.");
+  curCls = cls; curSt = s;
   renderResult(cls, s);
   rform.hidden = true; rout.hidden = false;
   window.scrollTo({top: 0, behavior: "smooth"});
@@ -169,6 +172,89 @@ document.getElementById("rback").addEventListener("click", () => {
   rout.hidden = true; rform.hidden = false;
   document.getElementById("rcap").value = ""; drawCaptcha();
   window.scrollTo({top: 0, behavior: "smooth"});
+});
+
+/* ---------- download result as image ---------- */
+document.getElementById("rdl").addEventListener("click", () => {
+  if (!curCls || !curSt) return;
+  const W = 1000, pad = 60, rowH = 46;
+  const n = curCls.subjects.length;
+  const H = pad + 120 + 26 + 70 + 40 + n * rowH + 150 + 70;
+  const cv = document.createElement("canvas");
+  cv.width = W; cv.height = H;
+  const x = cv.getContext("2d");
+  const navy = "#16345f", muted = "#5c6470", ink = "#1c1c1c";
+  x.fillStyle = "#ffffff"; x.fillRect(0, 0, W, H);
+  x.textAlign = "center";
+  x.fillStyle = navy; x.font = "bold 34px Georgia,serif";
+  x.fillText("Shankardev Shishu Niketan, Bhuragaon", W / 2, pad + 34);
+  x.fillStyle = muted; x.font = "20px sans-serif";
+  x.fillText("\u09b6\u0982\u0995\u09f0\u09a6\u09c7\u09f1 \u09b6\u09bf\u09b6\u09c1 \u09a8\u09bf\u0995\u09c7\u09a4\u09a8, \u09ad\u09c2\u09f0\u09be\u0997\u09be\u0993", W / 2, pad + 68);
+  x.font = "17px sans-serif";
+  x.fillText("Annual Examination 2026  \u00b7  Marksheet", W / 2, pad + 100);
+  let y = pad + 132;
+  x.strokeStyle = "#e9e2d3"; x.lineWidth = 2;
+  x.beginPath(); x.moveTo(pad, y); x.lineTo(W - pad, y); x.stroke();
+  y += 44;
+  x.textAlign = "left"; x.fillStyle = ink; x.font = "19px sans-serif";
+  x.fillText("Name:  " + curSt.name, pad, y);
+  x.textAlign = "right";
+  x.fillText(curCls.name + "   \u00b7   Roll No. " + curSt.roll, W - pad, y);
+  y += 40;
+  // table header
+  x.textAlign = "left"; x.fillStyle = muted; x.font = "bold 14px sans-serif";
+  x.fillText("SUBJECT", pad, y);
+  x.textAlign = "center";
+  x.fillText("MARKS", W - 220, y);
+  x.fillText("STATUS", W - pad - 40, y);
+  y += 8;
+  x.strokeStyle = navy; x.lineWidth = 2;
+  x.beginPath(); x.moveTo(pad, y); x.lineTo(W - pad, y); x.stroke();
+  y += 30;
+  let total = 0, failed = false;
+  x.font = "18px sans-serif";
+  curCls.subjects.forEach((sub, i) => {
+    const m = curSt.marks[i], ok = m >= 33;
+    total += m; if (!ok) failed = true;
+    x.textAlign = "left"; x.fillStyle = ink;
+    x.fillText(sub, pad, y);
+    x.textAlign = "center"; x.fillStyle = ink;
+    x.fillText(m + " / 100", W - 220, y);
+    x.fillStyle = ok ? "#1e7e34" : "#a32b2b"; x.font = "bold 18px sans-serif";
+    x.fillText(ok ? "Pass" : "Fail", W - pad - 40, y);
+    x.font = "18px sans-serif";
+    y += rowH;
+  });
+  const max = n * 100, pct = total / max * 100;
+  x.strokeStyle = navy; x.lineWidth = 2;
+  x.beginPath(); x.moveTo(pad, y - 22); x.lineTo(W - pad, y - 22); x.stroke();
+  x.textAlign = "left"; x.fillStyle = ink; x.font = "bold 19px sans-serif";
+  x.fillText("Total", pad, y + 6);
+  x.textAlign = "center"; x.fillText(total + " / " + max, W - 220, y + 6);
+  y += 40;
+  x.textAlign = "left"; x.fillText("Percentage", pad, y + 6);
+  x.textAlign = "center"; x.fillText(pct.toFixed(2) + "%", W - 220, y + 6);
+  y += 52;
+  let div;
+  if (failed || pct < 33) div = "Fail";
+  else if (pct >= 60) div = "First Division";
+  else if (pct >= 45) div = "Second Division";
+  else div = "Third Division";
+  x.textAlign = "center"; x.font = "bold 26px Georgia,serif";
+  x.fillStyle = (div === "Fail") ? "#a32b2b" : "#1e7e34";
+  x.fillText(div, W / 2, y + 6);
+  y += 60;
+  x.fillStyle = muted; x.font = "14px sans-serif";
+  const d = new Date();
+  x.fillText("Generated on " + d.toLocaleDateString("en-IN", {day:"numeric", month:"long", year:"numeric"}) + "  \u00b7  For corrections, contact the school office.", W / 2, y);
+  cv.toBlob(blob => {
+    const a = document.createElement("a");
+    const nm = curSt.name.replace(/[^a-z0-9]+/gi, "_");
+    a.href = URL.createObjectURL(blob);
+    a.download = "Result_" + curCls.name.replace(/\s+/g, "") + "_Roll" + curSt.roll + "_" + nm + ".png";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  }, "image/png");
 });
 </script>
 </body>
