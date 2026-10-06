@@ -78,21 +78,21 @@
       <input type="hidden" name="from_name" value="SSN Bhuragaon Website">
       <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off">
       <div class="frow">
-        <div>
+        <div class="field">
           <label for="sname">Student Name <span class="req">*</span></label>
           <input id="sname" name="student_name" type="text" required autocomplete="off" placeholder="Full name of the child">
         </div>
-        <div>
+        <div class="field">
           <label for="pname">Parents Name <span class="req">*</span></label>
           <input id="pname" name="parent_name" type="text" required autocomplete="off" placeholder="Parent or guardian name">
         </div>
       </div>
       <div class="frow">
-        <div>
-          <label for="sage">Student Age <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+        <div class="field">
+          <label for="sage">Student Age <span style="font-weight:400;letter-spacing:.3px;text-transform:none">— optional</span></label>
           <input id="sage" name="student_age" type="number" min="2" max="20" autocomplete="off" placeholder="Age in years">
         </div>
-        <div>
+        <div class="field">
           <label for="cls">Class Want to Take Admission <span class="req">*</span></label>
           <select id="cls" name="class_applying" required>
             <option value="" disabled selected>Select class</option>
@@ -105,7 +105,7 @@
         </div>
       </div>
       <div class="frow full">
-        <div>
+        <div class="field">
           <label for="phone">Calling Number <span class="req">*</span></label>
           <input id="phone" name="phone" type="tel" required autocomplete="off" placeholder="10-digit mobile number" pattern="[0-9+ ]{10,15}">
         </div>
