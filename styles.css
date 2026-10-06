@@ -206,3 +206,7 @@ footer li{margin-bottom:7px;}
 @media(prefers-reduced-motion:reduce){.ticker-track{animation:none;}}
 .fbot a{color:#cfd6e2;text-decoration:none;font-weight:600;}
 .fbot a:hover{color:#fff;text-decoration:underline;}
+.weblink{display:flex;align-items:center;gap:10px;margin:10px 0;}
+.weblink svg{flex-shrink:0;color:var(--navy);}
+.weblink a{font-weight:600;text-decoration:none;color:var(--ink);}
+.weblink a:hover{color:var(--navy);text-decoration:underline;}
