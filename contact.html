@@ -71,8 +71,59 @@
         </a>
       </div>
     </div>
+
+    <div class="card" style="margin-top:28px;">
+      <h3>Feedback</h3>
+      <p style="color:var(--muted);font-size:15px;">Have a suggestion or something to tell us? We would love to hear from you.</p>
+      <form class="adm-form" id="fbForm" novalidate style="margin-top:18px;">
+        <input type="hidden" name="access_key" value="dd136e0b-9b10-48d4-91e5-6a4aa4598625">
+        <input type="hidden" name="subject" value="New feedback — SSN Bhuragaon website">
+        <input type="hidden" name="from_name" value="SSN Bhuragaon Website">
+        <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off">
+        <div class="frow">
+          <div class="field">
+            <label for="fname">Your Name <span class="req">*</span></label>
+            <input id="fname" name="name" type="text" required autocomplete="off" placeholder="Your full name">
+          </div>
+          <div class="field">
+            <label for="fphone">Phone Number <span style="font-weight:400;letter-spacing:.3px;text-transform:none">&mdash; optional</span></label>
+            <input id="fphone" name="phone" type="tel" autocomplete="off" placeholder="10-digit mobile number" pattern="[0-9+ ]{10,15}">
+          </div>
+        </div>
+        <div class="frow full">
+          <div class="field">
+            <label for="fmsg">Your Feedback <span class="req">*</span></label>
+            <textarea id="fmsg" name="message" required placeholder="Write your suggestion or feedback here" style="resize:vertical;min-height:110px;"></textarea>
+          </div>
+        </div>
+        <button type="submit" class="btn navy" id="fbBtn">Send feedback</button>
+        <div class="fmsg" id="fbMsg" role="status"></div>
+      </form>
+    </div>
   </div>
 </section>
+
+<script>
+(function(){
+  var form=document.getElementById("fbForm");
+  if(!form) return;
+  var btn=document.getElementById("fbBtn"), msg=document.getElementById("fbMsg");
+  function show(text,ok){ msg.textContent=text; msg.className="fmsg "+(ok?"ok":"err"); }
+  form.addEventListener("submit",function(e){
+    e.preventDefault();
+    if(!form.checkValidity()){ form.reportValidity(); return; }
+    btn.disabled=true; btn.textContent="Sending\u2026"; msg.className="fmsg";
+    fetch("https://api.web3forms.com/submit",{method:"POST",body:new FormData(form)})
+      .then(function(r){ return r.json(); })
+      .then(function(j){
+        if(j.success){ show("Thank you! Your feedback has been sent successfully.",true); form.reset(); }
+        else{ show("Something went wrong. Please try again.",false); }
+      })
+      .catch(function(){ show("Could not send. Please check your connection and try again.",false); })
+      .finally(function(){ btn.disabled=false; btn.textContent="Send feedback"; });
+  });
+})();
+</script>
 
 <footer>
   <div class="wrap">
