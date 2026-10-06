@@ -191,3 +191,16 @@ footer li{margin-bottom:7px;}
 .adm-form .fmsg.err{display:block;background:#fdf0ef;color:#b3261e;border:1px solid #f3c9c4;}
 .adm-form button[disabled]{opacity:.6;cursor:wait;}
 @media(max-width:640px){.adm-form{padding:28px 22px;}.adm-form .frow{grid-template-columns:1fr;}}
+
+/* moving notice ticker */
+.ticker{background:var(--navy);color:#fff;overflow:hidden;white-space:nowrap;}
+.ticker-track{display:inline-flex;align-items:center;gap:0;padding:10px 0;animation:tick 28s linear infinite;will-change:transform;}
+.ticker:hover .ticker-track{animation-play-state:paused;}
+.ticker-track>span{display:inline-flex;align-items:center;}
+.titem{padding:0 26px;font-size:14px;font-weight:600;letter-spacing:.3px;}
+.tdot{color:var(--gold);font-size:14px;}
+.pdflink{display:inline-block;margin-top:6px;font-size:14px;font-weight:700;color:var(--navy);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:8px 16px;background:var(--cream);}
+.pdflink:hover{background:var(--gold-light);}
+.notice .ndate{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:6px;}
+@keyframes tick{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+@media(prefers-reduced-motion:reduce){.ticker-track{animation:none;}}
