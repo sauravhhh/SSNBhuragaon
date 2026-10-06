@@ -42,6 +42,12 @@ td.m,th.m{text-align:center;}
 .rdiv.fail{color:#a32b2b;}
 .rdiv.pass{color:#1e7e34;}
 .note{text-align:center;color:var(--muted);font-size:12px;margin-top:18px;}
+.signrow{display:flex;justify-content:space-between;align-items:flex-end;margin-top:24px;gap:16px;}
+.stamp{width:112px;height:112px;transform:rotate(-8deg);opacity:.92;flex-shrink:0;}
+.signblock{text-align:center;padding-bottom:6px;}
+.signline{width:180px;max-width:40vw;border-bottom:2px solid var(--ink);height:36px;}
+.signcap{font-size:13px;font-weight:700;color:var(--ink);margin-top:6px;line-height:1.5;}
+.signcap span{font-weight:400;color:var(--muted);font-size:12px;}
 </style>
 </head>
 <body>
@@ -79,6 +85,24 @@ td.m,th.m{text-align:center;}
     <div class="rtotal"><span>Total (out of <span id="rmax"></span>)</span><b id="rtot"></b></div>
     <div class="rtotal"><span>Percentage</span><b id="rpct"></b></div>
     <div class="rdiv" id="rdiv"></div>
+    <div class="signrow">
+      <svg class="stamp" viewBox="0 0 120 120" aria-label="School stamp">
+        <defs>
+          <path id="stTop" d="M16,60 a44,44 0 1,1 88,0" fill="none"/>
+          <path id="stBot" d="M16,60 a44,44 0 1,0 88,0" fill="none"/>
+        </defs>
+        <circle cx="60" cy="60" r="56" fill="none" stroke="#1a56a8" stroke-width="3"/>
+        <circle cx="60" cy="60" r="48" fill="none" stroke="#1a56a8" stroke-width="1.5"/>
+        <text font-size="11" font-weight="bold" fill="#1a56a8" font-family="sans-serif" letter-spacing="1"><textPath href="#stTop" startOffset="50%" text-anchor="middle">SHANKARDEV SHISHU NIKETAN</textPath></text>
+        <text font-size="10.5" font-weight="bold" fill="#1a56a8" font-family="sans-serif" letter-spacing="1"><textPath href="#stBot" startOffset="50%" text-anchor="middle">BHURAGAON &#8226; MORIGAON</textPath></text>
+        <text x="60" y="59" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a56a8" font-family="sans-serif">ESTD 2004</text>
+        <text x="60" y="75" text-anchor="middle" font-size="11" fill="#1a56a8">&#9733;</text>
+      </svg>
+      <div class="signblock">
+        <div class="signline"></div>
+        <div class="signcap">Principal<br><span>Shankardev Shishu Niketan, Bhuragaon</span></div>
+      </div>
+    </div>
     <button class="btn" id="rdl" type="button" style="margin-top:10px">Download Result</button>
     <button class="btn ghost" id="rback" type="button">Check another result</button>
   </div>
@@ -244,11 +268,40 @@ document.getElementById("rback").addEventListener("click", () => {
 });
 
 /* ---------- download result as image ---------- */
+
+function drawStamp(x, cx, cy, R) {
+  x.save();
+  x.translate(cx, cy); x.rotate(-0.14); x.translate(-cx, -cy);
+  const blue = "rgba(26,86,168,.88)";
+  x.strokeStyle = blue; x.fillStyle = blue;
+  x.lineWidth = 3;
+  x.beginPath(); x.arc(cx, cy, R, 0, Math.PI*2); x.stroke();
+  x.lineWidth = 1.5;
+  x.beginPath(); x.arc(cx, cy, R-8, 0, Math.PI*2); x.stroke();
+  x.textAlign = "center"; x.textBaseline = "middle";
+  const top = "SHANKARDEV SHISHU NIKETAN", bot = "BHURAGAON \u2022 MORIGAON", rT = R-20;
+  x.font = "bold 15px sans-serif";
+  const spreadT = Math.PI*0.95;
+  for (let i=0;i<top.length;i++){
+    const a = -Math.PI/2 + (i/(top.length-1)-0.5)*spreadT;
+    x.save(); x.translate(cx+rT*Math.cos(a), cy+rT*Math.sin(a)); x.rotate(a+Math.PI/2); x.fillText(top[i],0,0); x.restore();
+  }
+  const spreadB = Math.PI*0.7;
+  for (let i=0;i<bot.length;i++){
+    const a = Math.PI/2 + (0.5-i/(bot.length-1))*spreadB;
+    x.save(); x.translate(cx+rT*Math.cos(a), cy+rT*Math.sin(a)); x.rotate(a-Math.PI/2); x.fillText(bot[i],0,0); x.restore();
+  }
+  x.font = "bold 16px sans-serif";
+  x.fillText("ESTD 2004", cx, cy-3);
+  x.font = "15px sans-serif";
+  x.fillText("\u2605", cx, cy+20);
+  x.restore();
+}
 document.getElementById("rdl").addEventListener("click", () => {
   if (!curCls || !curSt) return;
   const W = 1000, pad = 60, rowH = 46;
   const n = curCls.subjects.length;
-  const H = pad + 120 + 26 + 70 + 40 + n * rowH + 150 + 70;
+  const H = pad + 120 + 26 + 70 + 40 + n * rowH + 150 + 230;
   const cv = document.createElement("canvas");
   cv.width = W; cv.height = H;
   const x = cv.getContext("2d");
@@ -312,7 +365,14 @@ document.getElementById("rdl").addEventListener("click", () => {
   x.textAlign = "center"; x.font = "bold 26px Georgia,serif";
   x.fillStyle = (div === "Fail") ? "#a32b2b" : "#1e7e34";
   x.fillText(div, W / 2, y + 6);
-  y += 60;
+  y += 26;
+  drawStamp(x, pad+64, y+64, 58);
+  x.strokeStyle = ink; x.lineWidth = 2;
+  const sx = W - pad - 200;
+  x.beginPath(); x.moveTo(sx, y+100); x.lineTo(sx+200, y+100); x.stroke();
+  x.fillStyle = ink; x.font = "15px sans-serif"; x.textAlign = "center";
+  x.fillText("Principal", sx+100, y+124);
+  y += 168;
   x.fillStyle = muted; x.font = "14px sans-serif";
   const d = new Date();
   x.fillText("Generated on " + d.toLocaleDateString("en-IN", {day:"numeric", month:"long", year:"numeric"}) + "  \u00b7  For corrections, contact the school office.", W / 2, y);
