@@ -42,13 +42,54 @@ td.m,th.m{text-align:center;}
 .rdiv.fail{color:#a32b2b;}
 .rdiv.pass{color:#1e7e34;}
 .note{text-align:center;color:var(--muted);font-size:12px;margin-top:18px;}
+
+/* site menu button + circular reveal nav, ported from styles.css */
+#menuBtn{display:block;background:none;border:1px solid var(--line);border-radius:8px;width:42px;height:36px;cursor:pointer;position:relative;z-index:2;margin-left:auto;flex-shrink:0;}
+#menuBtn span{position:absolute;left:10px;right:10px;height:2px;background:var(--navy);border-radius:2px;}
+#menuBtn span:nth-child(1){top:11px;}
+#menuBtn span:nth-child(2){top:17px;}
+#menuBtn span:nth-child(3){top:23px;}
+#menuBtn.anim span:nth-child(1){animation:mbTopClose .55s ease-in-out forwards;}
+#menuBtn.anim span:nth-child(2){animation:mbMidClose .55s ease-in-out forwards;}
+#menuBtn.anim span:nth-child(3){animation:mbBotClose .55s ease-in-out forwards;}
+#menuBtn.anim.open span:nth-child(1){animation:mbTopOpen .55s ease-in-out forwards;}
+#menuBtn.anim.open span:nth-child(2){animation:mbMidOpen .55s ease-in-out forwards;}
+#menuBtn.anim.open span:nth-child(3){animation:mbBotOpen .55s ease-in-out forwards;}
+@keyframes mbTopOpen{0%{top:11px;transform:rotate(0deg) scaleX(1);}40%{top:17px;transform:rotate(0deg) scaleX(1);}100%{top:17px;transform:rotate(45deg) scaleX(1.45);}}
+@keyframes mbTopClose{0%{top:17px;transform:rotate(45deg) scaleX(1.45);}60%{top:17px;transform:rotate(0deg) scaleX(1);}100%{top:11px;transform:rotate(0deg) scaleX(1);}}
+@keyframes mbBotOpen{0%{top:23px;transform:rotate(0deg) scaleX(1);}40%{top:17px;transform:rotate(0deg) scaleX(1);}100%{top:17px;transform:rotate(-45deg) scaleX(1.45);}}
+@keyframes mbBotClose{0%{top:17px;transform:rotate(-45deg) scaleX(1.45);}60%{top:17px;transform:rotate(0deg) scaleX(1);}100%{top:23px;transform:rotate(0deg) scaleX(1);}}
+@keyframes mbMidOpen{0%{opacity:1;}40%,100%{opacity:0;}}
+@keyframes mbMidClose{0%,60%{opacity:0;}100%{opacity:1;}}
+#menuBtn.open{border-color:rgba(255,255,255,.4);}
+#menuBtn.open span{background:#fff;}
+#rnav{position:fixed;inset:0;z-index:1;background:radial-gradient(1200px 600px at 50% -10%,#20457c 0%,#0f2547 65%);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;padding:60px 24px;clip-path:circle(0px at var(--cx,calc(100vw - 41px)) var(--cy,40px));-webkit-clip-path:circle(0px at var(--cx,calc(100vw - 41px)) var(--cy,40px));transition:clip-path .7s cubic-bezier(.76,0,.24,1),-webkit-clip-path .7s cubic-bezier(.76,0,.24,1);pointer-events:none;}
+#rnav.open{clip-path:circle(150% at var(--cx,calc(100vw - 41px)) var(--cy,40px));-webkit-clip-path:circle(150% at var(--cx,calc(100vw - 41px)) var(--cy,40px));pointer-events:auto;}
+#rnav a{color:#fff;font-size:23px;font-family:Georgia,serif;text-decoration:none;padding:10px 18px;opacity:0;transform:translateY(16px);transition:opacity .4s ease,transform .4s ease;}
+#rnav.open a{opacity:1;transform:translateY(0);}
+#rnav.open a:nth-child(1){transition-delay:.28s;}
+#rnav.open a:nth-child(2){transition-delay:.34s;}
+#rnav.open a:nth-child(3){transition-delay:.40s;}
+#rnav.open a:nth-child(4){transition-delay:.46s;}
+#rnav.open a:nth-child(5){transition-delay:.52s;}
+#rnav.open a:nth-child(6){transition-delay:.58s;}
+#rnav a:hover{background:rgba(255,255,255,.1);}
 </style>
 </head>
 <body>
 <header class="rhead">
   <img src="images/logo.png" alt="School emblem">
   <div><div class="en">Shankardev Shishu Niketan, Bhuragaon</div><div class="as">Result Portal</div></div>
+  <button id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
 </header>
+<nav id="rnav">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="academics.html">Academics &amp; Facilities</a>
+  <a href="admissions.html">Admissions</a>
+  <a href="notices.html">Notices</a>
+  <a href="contact.html">Contact</a>
+</nav>
 <main class="wrap">
   <h1>Check Result</h1>
   <p class="sub">Annual Examination 2026</p>
@@ -349,6 +390,20 @@ function pdfMarksheet() {
 }
 document.getElementById("rdl").addEventListener("click", pdfMarksheet);
 
+
+var menuBtn=document.getElementById("menuBtn"),rnav=document.getElementById("rnav");
+menuBtn.onclick=function(){
+  menuBtn.classList.add("anim");
+  var open=rnav.classList.toggle("open");
+  menuBtn.classList.toggle("open",open);
+  if(open){
+    var r=menuBtn.getBoundingClientRect();
+    rnav.style.setProperty("--cx",(r.left+r.width/2)+"px");
+    rnav.style.setProperty("--cy",(r.top+r.height/2)+"px");
+    document.body.style.overflow="hidden";
+  }else{document.body.style.overflow="";}
+};
+rnav.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){rnav.classList.remove("open");menuBtn.classList.remove("open");document.body.style.overflow="";});});
 </script>
 </body>
 </html>
