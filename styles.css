@@ -194,7 +194,7 @@ footer li{margin-bottom:7px;}
 
 /* moving notice ticker */
 .ticker{background:var(--navy);color:#fff;overflow:hidden;white-space:nowrap;}
-.ticker-track{display:inline-flex;align-items:center;gap:0;padding:10px 0;animation:tick 28s linear infinite;will-change:transform;}
+.ticker-track{display:inline-flex;align-items:center;gap:0;padding:10px 0;animation:tick 12s linear infinite;will-change:transform;}
 .ticker:hover .ticker-track{animation-play-state:paused;}
 .ticker-track>span{display:inline-flex;align-items:center;}
 .titem{padding:0 26px;font-size:14px;font-weight:600;letter-spacing:.3px;}
