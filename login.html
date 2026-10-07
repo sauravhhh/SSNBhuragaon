@@ -325,8 +325,46 @@ function renderResult(cls, s) {
 /* ---------- OAuth sign-in (Microsoft + Google) ---------- */
 const MS_CLIENT_ID = "YOUR_MICROSOFT_CLIENT_ID"; // set after Azure app registration
 const GOOGLE_CLIENT_ID = "238031307489-706ha9pmkccpm00pnc7qg1p0resdlga9.apps.googleusercontent.com";
+const SUPABASE_URL = "YOUR_SUPABASE_URL";       // set after creating the ssn-bhuragaon project
+const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
 const OAUTH_LINK_KEY = "ssn_oauth_link";
 let msalApp = null, msAccount = null;
+
+function sbConfigured() {
+  return SUPABASE_URL !== "YOUR_SUPABASE_URL" && SUPABASE_ANON_KEY !== "YOUR_SUPABASE_ANON_KEY";
+}
+
+/* Write one row to the `logins` audit table (no-op until Supabase is configured) */
+function logLogin(provider, acct, clsName, roll) {
+  if (!sbConfigured()) return;
+  try {
+    fetch(SUPABASE_URL + "/rest/v1/logins", {
+      method: "POST",
+      headers: {
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+        "Content-Type": "application/json",
+        "Prefer": "return=minimal"
+      },
+      body: JSON.stringify({
+        provider: provider,
+        provider_id: String(acct.id || ""),
+        name: acct.name || null,
+        email: acct.email || null,
+        linked_class: clsName || null,
+        linked_roll: roll || null
+      })
+    }).catch(function () {});
+  } catch (e) {}
+}
+
+function storedLink(provider, acctId) {
+  try {
+    const link = JSON.parse(localStorage.getItem(OAUTH_LINK_KEY) || "null");
+    if (link && link.provider === provider && link.acct === acctId) return link;
+  } catch (e) {}
+  return null;
+}
 
 function msConfigured() {
   return MS_CLIENT_ID !== "YOUR_MICROSOFT_CLIENT_ID" && typeof msal !== "undefined";
@@ -345,12 +383,18 @@ async function msInit() {
     });
     let resp = null;
     try { resp = await msalApp.handleRedirectPromise(); } catch (e) { /* user cancelled */ }
+    const freshSignIn = !!(resp && resp.account);
     if (resp && resp.account) msalApp.setActiveAccount(resp.account);
     const accs = msalApp.getAllAccounts();
     if (accs.length) {
       msAccount = accs[0];
       msalApp.setActiveAccount(msAccount);
-      oauthAfterSignIn("microsoft", { id: msAccount.homeAccountId, name: msAccount.name || "", email: msAccount.username || "" });
+      const acct = { id: msAccount.homeAccountId, name: msAccount.name || "", email: msAccount.username || "" };
+      oauthAfterSignIn("microsoft", acct);
+      if (freshSignIn) {
+        const lk = storedLink("microsoft", acct.id);
+        logLogin("microsoft", acct, lk && lk.cls, lk && lk.roll);
+      }
     }
   } catch (e) { /* MSAL unavailable - DOB login still works */ }
 }
@@ -395,6 +439,7 @@ function oauthDoLink() {
     localStorage.setItem(OAUTH_LINK_KEY, JSON.stringify({ provider: oauthProvider, acct: oauthAccount.id, cls: cn, roll: roll }));
   } catch (e) {}
   curCls = cls; curSt = st;
+  logLogin(oauthProvider, oauthAccount, cls.name, roll);
   mslink.hidden = true;
   showHome();
 }
@@ -432,7 +477,10 @@ function gInit() {
 function onGoogleCredential(resp) {
   try {
     const payload = JSON.parse(atob(resp.credential.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
-    oauthAfterSignIn("google", { id: payload.sub, name: payload.name || "", email: payload.email || "" });
+    const acct = { id: payload.sub, name: payload.name || "", email: payload.email || "" };
+    oauthAfterSignIn("google", acct);
+    const lk = storedLink("google", acct.id);
+    logLogin("google", acct, lk && lk.cls, lk && lk.roll);
   } catch (e) {
     showErr("Google sign-in failed. Please try again.");
   }
