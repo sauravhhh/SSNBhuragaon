@@ -114,6 +114,7 @@ td.m,th.m{text-align:center;}
       <svg viewBox="0 0 21 21" aria-hidden="true"><rect x="1" y="1" width="9" height="9" fill="#f25022"/><rect x="11" y="1" width="9" height="9" fill="#7fba00"/><rect x="1" y="11" width="9" height="9" fill="#00a4ef"/><rect x="11" y="11" width="9" height="9" fill="#ffb900"/></svg>
       Sign in with Microsoft
     </button>
+    <div id="gbtn" style="margin-top:10px;display:flex;justify-content:center"></div>
     <p class="note" style="margin-top:12px">Parents &amp; guardians — sign in once, then link to the student record.</p>
   </div>
   <div class="card" id="mslink" hidden>
@@ -149,6 +150,7 @@ td.m,th.m{text-align:center;}
   <p class="note">For any correction, contact the school office.</p>
 </main>
 <script src="https://unpkg.com/@azure/msal-browser@2.38.0/lib/msal-browser.min.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
 "use strict";
 const XLSX_URL = "results/onxxgawftv.xlsx";
@@ -242,7 +244,7 @@ async function loadFromXlsx() {
 
 
 /* ---------- lookup ---------- */
-let curCls = null, curSt = null, viaMS = false;
+let curCls = null, curSt = null, oauthProvider = null, oauthAccount = null; // oauthProvider: 'microsoft' | 'google'
 const rform = document.getElementById("rform"), rout = document.getElementById("rout"), rerr = document.getElementById("rerr");
 const rhome = document.getElementById("rhome"), ptitle = document.getElementById("ptitle"), hmeta = document.getElementById("hmeta");
 const mscard = document.getElementById("mscard"), mslink = document.getElementById("mslink");
@@ -256,8 +258,8 @@ function showHome() {
   rform.hidden = true; mscard.hidden = true; mslink.hidden = true;
   rout.hidden = true; rhome.hidden = false;
   ptitle.textContent = "Welcome, " + curSt.name.split(" ")[0];
-  hmeta.textContent = curCls.name + "  \u00b7  Roll No. " + curSt.roll + (viaMS ? "  \u00b7  via Microsoft" : "");
-  document.getElementById("hout").textContent = viaMS ? "Sign out" : "Log Out";
+  hmeta.textContent = curCls.name + "  \u00b7  Roll No. " + curSt.roll + (oauthProvider ? "  \u00b7  via " + (oauthProvider === "microsoft" ? "Microsoft" : "Google") : "");
+  document.getElementById("hout").textContent = oauthProvider ? "Sign out" : "Log Out";
   window.scrollTo({top: 0, behavior: "smooth"});
 }
 function showResult() {
@@ -286,7 +288,7 @@ rform.addEventListener("submit", e => {
 });
 document.getElementById("hview").addEventListener("click", () => { if (curCls && curSt) showResult(); });
 document.getElementById("hout").addEventListener("click", () => {
-  if (viaMS) { msSignOut(); return; }
+  if (oauthProvider) { oauthSignOut(); return; }
   curCls = null; curSt = null; rerr.hidden = true;
   document.getElementById("rroll").value = "";
   document.getElementById("rdob").value = "";
@@ -320,9 +322,10 @@ function renderResult(cls, s) {
 
 
 
-/* ---------- Microsoft sign-in (MSAL) ---------- */
+/* ---------- OAuth sign-in (Microsoft + Google) ---------- */
 const MS_CLIENT_ID = "YOUR_MICROSOFT_CLIENT_ID"; // set after Azure app registration
-const MS_LINK_KEY = "ssn_ms_link";
+const GOOGLE_CLIENT_ID = "238031307489-706ha9pmkccpm00pnc7qg1p0resdlga9.apps.googleusercontent.com";
+const OAUTH_LINK_KEY = "ssn_oauth_link";
 let msalApp = null, msAccount = null;
 
 function msConfigured() {
@@ -347,7 +350,7 @@ async function msInit() {
     if (accs.length) {
       msAccount = accs[0];
       msalApp.setActiveAccount(msAccount);
-      msAfterSignIn();
+      oauthAfterSignIn("microsoft", { id: msAccount.homeAccountId, name: msAccount.name || "", email: msAccount.username || "" });
     }
   } catch (e) { /* MSAL unavailable - DOB login still works */ }
 }
@@ -360,23 +363,25 @@ function msSignIn() {
   msalApp.loginRedirect({ scopes: ["openid", "profile", "email"] });
 }
 
-function msAfterSignIn() {
+function oauthAfterSignIn(provider, acct) {
+  oauthProvider = provider;
+  oauthAccount = acct;
   let link = null;
-  try { link = JSON.parse(localStorage.getItem(MS_LINK_KEY) || "null"); } catch (e) {}
-  if (link && link.acct === msAccount.homeAccountId) {
+  try { link = JSON.parse(localStorage.getItem(OAUTH_LINK_KEY) || "null"); } catch (e) {}
+  if (link && link.provider === provider && link.acct === acct.id) {
     const cls = classes.find(c => c.name === link.cls);
     const st = cls && cls.students.find(x => x.roll === link.roll);
-    if (st) { curCls = cls; curSt = st; viaMS = true; showHome(); return; }
+    if (st) { curCls = cls; curSt = st; showHome(); return; }
   }
   rform.hidden = true; mscard.hidden = true; rhome.hidden = true; rout.hidden = true;
   mslink.hidden = false;
   ptitle.textContent = "Link your account";
   document.getElementById("msmeta").textContent =
-    (msAccount.name || "") + (msAccount.username ? "  \u00b7  " + msAccount.username : "");
+    (acct.name || "") + (acct.email ? "  \u00b7  " + acct.email : "");
   window.scrollTo({top: 0, behavior: "smooth"});
 }
 
-function msDoLink() {
+function oauthDoLink() {
   const err = document.getElementById("mserr");
   err.hidden = true;
   const cn = msclass.value;
@@ -387,27 +392,56 @@ function msDoLink() {
   const st = cls && cls.students.find(x => x.roll === roll);
   if (!st) { err.textContent = "No student found for that class and roll number."; err.hidden = false; return; }
   try {
-    localStorage.setItem(MS_LINK_KEY, JSON.stringify({ acct: msAccount.homeAccountId, cls: cn, roll: roll }));
+    localStorage.setItem(OAUTH_LINK_KEY, JSON.stringify({ provider: oauthProvider, acct: oauthAccount.id, cls: cn, roll: roll }));
   } catch (e) {}
-  curCls = cls; curSt = st; viaMS = true;
+  curCls = cls; curSt = st;
   mslink.hidden = true;
   showHome();
 }
 
-function msSignOut() {
-  try { localStorage.removeItem(MS_LINK_KEY); } catch (e) {}
-  curCls = null; curSt = null; viaMS = false; msAccount = null;
-  if (msalApp) {
+function oauthSignOut() {
+  try { localStorage.removeItem(OAUTH_LINK_KEY); } catch (e) {}
+  curCls = null; curSt = null;
+  const was = oauthProvider;
+  oauthProvider = null; oauthAccount = null; msAccount = null;
+  if (was === "microsoft" && msalApp) {
     const accs = msalApp.getAllAccounts();
     msalApp.logoutRedirect({ account: accs[0] || undefined });
-  } else {
-    showLogin();
+    return;
+  }
+  if (was === "google" && typeof google !== "undefined" && google.accounts && google.accounts.id) {
+    try { google.accounts.id.disableAutoSelect(); } catch (e) {}
+  }
+  showLogin();
+}
+
+/* Google Identity Services */
+function gInit() {
+  if (typeof google === "undefined" || !google.accounts || !google.accounts.id) { setTimeout(gInit, 250); return; }
+  try {
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: onGoogleCredential,
+      auto_select: false
+    });
+    google.accounts.id.renderButton(document.getElementById("gbtn"),
+      { theme: "outline", size: "large", width: 320, text: "signin_with", shape: "rectangular" });
+  } catch (e) { /* GIS unavailable */ }
+}
+
+function onGoogleCredential(resp) {
+  try {
+    const payload = JSON.parse(atob(resp.credential.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
+    oauthAfterSignIn("google", { id: payload.sub, name: payload.name || "", email: payload.email || "" });
+  } catch (e) {
+    showErr("Google sign-in failed. Please try again.");
   }
 }
 
 document.getElementById("mslogin").addEventListener("click", msSignIn);
-document.getElementById("mslinkbtn").addEventListener("click", msDoLink);
-document.getElementById("mssignout1").addEventListener("click", msSignOut);
+document.getElementById("mslinkbtn").addEventListener("click", oauthDoLink);
+document.getElementById("mssignout1").addEventListener("click", oauthSignOut);
+gInit();
 
 var menuBtn=document.getElementById("menuBtn"),rnav=document.getElementById("rnav");
 menuBtn.onclick=function(){
