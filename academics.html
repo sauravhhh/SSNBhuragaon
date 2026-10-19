@@ -92,8 +92,11 @@
       <h3 id="uniformTitle">Uniform</h3>
       <button class="modal-x" id="uniformClose" aria-label="Close">&times;</button>
     </div>
-    <img id="uniformImg" class="umodal-img" src="" alt="">
-    <p id="uniformDesc" class="umodal-desc"></p>
+    <div class="uimg-wrap">
+      <img id="uniformImg" class="umodal-img" src="" alt="">
+      <button class="uhotspot hidden" id="hsPants" aria-label="Switch trousers"></button>
+      <button class="uhotspot hidden" id="hsShoes" aria-label="Switch shoes"></button>
+    </div>
   </div>
 </div>
 
@@ -188,21 +191,33 @@ if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.se
 <script>
 (function(){
   var data = {
-    boys: {title: "Boys' Uniform", img: "images/uniform-boys.jpg", alt: "Boys' uniform: white shirt, navy-blue shorts, white socks, black shoes", desc: "White shirt with navy-blue shorts or long pants and black shoes. On Thursdays and Saturdays: all-white uniform with white shoes. A red sweater is permitted in winter."},
-    girls: {title: "Girls' Uniform", img: "images/uniform-girls.jpg", alt: "Girls' uniform: white blouse, navy-blue skirt, white dupatta, white socks, black shoes", desc: "Navy-blue skirt or salwar-kameez with white dupatta and black shoes. On Thursdays and Sundays: all-white salwar-kameez with dupatta and white shoes. A red sweater is permitted in winter."}
+    boys: {title: "Boys' Uniform", img: "images/uniform-boys.jpg", white: "images/uniform-boys-white.jpg", alt: "Boys' school uniform"},
+    girls: {title: "Girls' Uniform", img: "images/uniform-girls.jpg", alt: "Girls' school uniform"}
   };
   var modal = document.getElementById('uniformModal');
   if(!modal) return;
   var title = document.getElementById('uniformTitle'),
       img = document.getElementById('uniformImg'),
-      desc = document.getElementById('uniformDesc'),
-      x = document.getElementById('uniformClose'), last = null;
+      x = document.getElementById('uniformClose'),
+      hsPants = document.getElementById('hsPants'),
+      hsShoes = document.getElementById('hsShoes'),
+      last = null, whiteOn = false;
   function open(k){
     var d = data[k];
-    title.textContent = d.title; img.src = d.img; img.alt = d.alt; desc.textContent = d.desc;
+    whiteOn = false;
+    title.textContent = d.title; img.src = d.img; img.alt = d.alt;
+    var isBoys = (k === 'boys');
+    hsPants.classList.toggle('hidden', !isBoys);
+    hsShoes.classList.toggle('hidden', !isBoys);
     modal.hidden = false; document.body.style.overflow = 'hidden'; x.focus();
   }
   function close(){ modal.hidden = true; document.body.style.overflow = ''; if(last) last.focus(); }
+  function toggleWhite(){
+    whiteOn = !whiteOn;
+    img.src = whiteOn ? data.boys.white : data.boys.img;
+  }
+  hsPants.addEventListener('click', function(e){ e.stopPropagation(); toggleWhite(); });
+  hsShoes.addEventListener('click', function(e){ e.stopPropagation(); toggleWhite(); });
   document.querySelectorAll('.ucard').forEach(function(b){
     b.addEventListener('click', function(){ last = b; open(b.getAttribute('data-uniform')); });
   });
