@@ -245,8 +245,8 @@ footer li{margin-bottom:7px;}
 .staff-list li{margin-bottom:10px;break-inside:avoid;}
 @media(max-width:560px){.staff-list{columns:1;}}
 
-.mcarousel{position:relative;overflow:hidden;background:#0f2547;touch-action:pan-y;margin:16px 0 24px;}
-.mcarousel .mc-slides{position:relative;height:62.5vw;max-height:480px;}
+.mcarousel{position:relative;overflow:hidden;background:#0f2547;touch-action:pan-y;margin:0;}
+.mcarousel .mc-slides{position:relative;height:56.25vw;max-height:480px;}
 .mcarousel .mc-slide{position:absolute;inset:0;opacity:0;transition:opacity .7s ease;}
 .mcarousel .mc-slide.active{opacity:1;}
 .mcarousel .mc-slide img{width:100%;height:100%;object-fit:cover;display:block;user-select:none;-webkit-user-select:none;}
@@ -257,5 +257,5 @@ footer li{margin-bottom:7px;}
 .mcarousel .mc-indicators{position:absolute;bottom:12px;left:0;right:0;display:flex;justify-content:center;gap:8px;}
 .mcarousel .mc-ind{width:32px;height:5px;border:none;border-radius:3px;background:rgba(255,255,255,.45);cursor:pointer;padding:0;-webkit-tap-highlight-color:transparent;}
 .mcarousel .mc-ind.active{background:#fff;}
-@media(max-width:640px){.mcarousel .mc-slides{height:75vw;max-height:none;}}
+@media(max-width:640px){.mcarousel .mc-slides{height:56.25vw;max-height:none;}}
 @media(max-width:640px){.glimpses{grid-template-columns:1fr;}}
