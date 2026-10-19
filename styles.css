@@ -226,4 +226,23 @@ footer li{margin-bottom:7px;}
 .glimpses img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;display:block;box-shadow:0 6px 18px rgba(15,37,71,.12);}
 .glimpses figcaption{font-size:13px;color:var(--muted);margin-top:8px;text-align:center;}
 .penicon{display:inline-flex;vertical-align:-7px;margin-right:10px;color:var(--navy);}
+
+.staff-box{display:flex;align-items:center;gap:16px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;cursor:pointer;margin-top:18px;font:inherit;color:inherit;}
+.staff-box:hover{border-color:var(--gold);}
+.staff-count{width:52px;height:52px;flex:0 0 52px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;}
+.staff-text{flex:1;}
+.staff-text b{display:block;color:var(--navy);font-size:16px;}
+.staff-text small{color:var(--muted);font-size:13px;}
+.staff-box .warrow{color:var(--gold);font-size:22px;font-weight:700;}
+.modal{position:fixed;inset:0;z-index:100;background:rgba(15,37,71,.55);display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal[hidden]{display:none;}
+.modal-card{background:#fff;border-radius:16px;max-width:560px;width:100%;max-height:82vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.25);}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--line);}
+.modal-head h3{margin:0;color:var(--navy);font-size:19px;}
+.modal-head .as{color:var(--muted);font-weight:400;font-size:15px;}
+.modal-x{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:20px;line-height:1;cursor:pointer;color:var(--navy);flex:0 0 36px;}
+.modal-x:hover{background:var(--cream);}
+.staff-list{margin:0;padding:18px 20px 22px 44px;overflow-y:auto;columns:2;column-gap:28px;font-size:15px;color:var(--ink);}
+.staff-list li{margin-bottom:10px;break-inside:avoid;}
+@media(max-width:560px){.staff-list{columns:1;}}
 @media(max-width:640px){.glimpses{grid-template-columns:1fr;}}
