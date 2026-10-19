@@ -73,11 +73,11 @@
     <div class="kicker">Uniform</div>
     <h2 class="stitle">Dress code</h2>
     <div class="cols">
-      <div class="card ucard" data-uniform="boys">
+      <div class="card">
         <h3>Boys</h3>
         <p>White shirt with navy-blue shorts or long pants and black shoes. On Thursdays and Saturdays: all-white uniform with white shoes. A red sweater is permitted in winter.</p>
       </div>
-      <div class="card ucard" data-uniform="girls">
+      <div class="card">
         <h3>Girls</h3>
         <p>Navy-blue skirt or salwar-kameez with white dupatta and black shoes. On Thursdays and Sundays: all-white salwar-kameez with dupatta and white shoes. A red sweater is permitted in winter.</p>
       </div>
@@ -85,24 +85,6 @@
     <p style="margin-top:18px;color:var(--muted);font-size:14px;">The school badge, ID card and name-belt are part of the uniform — keeping simplicity and discipline at the heart of everyday school life.</p>
   </div>
 </section>
-
-<div class="modal" id="uniformModal" role="dialog" aria-modal="true" aria-label="School uniform" hidden>
-  <div class="modal-card">
-    <div class="modal-head">
-      <h3 id="uniformTitle">Uniform</h3>
-      <button class="modal-x" id="uniformClose" aria-label="Close">&times;</button>
-    </div>
-    <div class="uimg-wrap">
-      <img id="uniformImg" class="umodal-img" src="" alt="">
-      <div id="uBoysStack" class="uboys">
-        <img class="uelem" src="images/u-shirt.png" alt="">
-        <button class="uelem-btn" id="uPants" aria-label="Switch trousers"><img id="uPantsImg" src="images/u-pants-navy.png" alt=""></button>
-        <img class="uelem" src="images/u-socks.png" alt="">
-        <button class="uelem-btn" id="uShoes" aria-label="Switch shoes"><img id="uShoesImg" src="images/u-shoes-black.png" alt=""></button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <section>
   <div class="wrap">
@@ -190,52 +172,6 @@ if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.se
   window.addEventListener('scroll', upd, {passive:true});
   window.addEventListener('resize', upd);
   upd();
-})();
-</script>
-<script>
-(function(){
-  var PANTS = {navy: "images/u-pants-navy.png", white: "images/u-pants-white.png"};
-  var SHOES = {black: "images/u-shoes-black.png", white: "images/u-shoes-white.png"};
-  var modal = document.getElementById('uniformModal');
-  if(!modal) return;
-  var title = document.getElementById('uniformTitle'),
-      img = document.getElementById('uniformImg'),
-      stack = document.getElementById('uBoysStack'),
-      x = document.getElementById('uniformClose'),
-      uPants = document.getElementById('uPants'),
-      uPantsImg = document.getElementById('uPantsImg'),
-      uShoes = document.getElementById('uShoes'),
-      uShoesImg = document.getElementById('uShoesImg'),
-      last = null;
-  function open(k){
-    var isBoys = (k === 'boys');
-    title.textContent = isBoys ? "Boys' Uniform" : "Girls' Uniform";
-    img.style.display = isBoys ? 'none' : 'block';
-    stack.style.display = isBoys ? 'flex' : 'none';
-    if(isBoys){
-      uPantsImg.src = PANTS.navy;
-      uShoesImg.src = SHOES.black;
-    }else{
-      img.src = "images/uniform-girls.jpg";
-      img.alt = "Girls' school uniform";
-    }
-    modal.hidden = false; document.body.style.overflow = 'hidden'; x.focus();
-  }
-  function close(){ modal.hidden = true; document.body.style.overflow = ''; if(last) last.focus(); }
-  uPants.addEventListener('click', function(e){
-    e.stopPropagation();
-    uPantsImg.src = (uPantsImg.getAttribute('src') === PANTS.navy) ? PANTS.white : PANTS.navy;
-  });
-  uShoes.addEventListener('click', function(e){
-    e.stopPropagation();
-    uShoesImg.src = (uShoesImg.getAttribute('src') === SHOES.black) ? SHOES.white : SHOES.black;
-  });
-  document.querySelectorAll('.ucard').forEach(function(b){
-    b.addEventListener('click', function(){ last = b; open(b.getAttribute('data-uniform')); });
-  });
-  x.addEventListener('click', close);
-  modal.addEventListener('click', function(e){ if(e.target === modal) close(); });
-  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && !modal.hidden) close(); });
 })();
 </script>
 </body>
