@@ -110,10 +110,7 @@ h2.stitle{font-size:clamp(26px,4vw,36px);color:var(--navy);margin-bottom:6px;}
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start;}
 @media(max-width:760px){.cols{grid-template-columns:1fr;}}
 .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px;}
-.ucard{text-align:left;font:inherit;color:inherit;cursor:pointer;width:100%;}
-.ucard:hover{border-color:var(--gold);}
-.ucard h3{margin-top:0;}
-.ulink{display:inline-block;margin-top:12px;font-weight:700;font-size:14px;color:var(--navy);}
+.ucard{cursor:pointer;}
 .umodal-img{display:block;width:100%;max-height:62vh;object-fit:contain;background:var(--cream);}
 .umodal-desc{margin:0;padding:16px 20px 20px;font-size:14px;color:var(--muted);line-height:1.65;}
 
