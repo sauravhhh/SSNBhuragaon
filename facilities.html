@@ -11,5 +11,19 @@
 <body style="font-family:sans-serif;padding:40px 20px;text-align:center;color:#16345f;">
 <p>Facilities have moved to the <a href="academics.html">Academics &amp; Facilities</a> page. Redirecting…</p>
 <script>location.replace("academics.html");</script>
+<div id="scrollProgress"></div>
+<script>
+(function(){
+  var bar = document.getElementById('scrollProgress');
+  function upd(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+  }
+  window.addEventListener('scroll', upd, {passive:true});
+  window.addEventListener('resize', upd);
+  upd();
+})();
+</script>
 </body>
 </html>
