@@ -73,18 +73,31 @@
     <div class="kicker">Uniform</div>
     <h2 class="stitle">Dress code</h2>
     <div class="cols">
-      <div class="card">
+      <button class="card ucard" data-uniform="boys" aria-haspopup="dialog">
         <h3>Boys</h3>
         <p>White shirt with navy-blue shorts or long pants and black shoes. On Thursdays and Saturdays: all-white uniform with white shoes. A red sweater is permitted in winter.</p>
-      </div>
-      <div class="card">
+        <span class="ulink">View uniform &rarr;</span>
+      </button>
+      <button class="card ucard" data-uniform="girls" aria-haspopup="dialog">
         <h3>Girls</h3>
         <p>Navy-blue skirt or salwar-kameez with white dupatta and black shoes. On Thursdays and Sundays: all-white salwar-kameez with dupatta and white shoes. A red sweater is permitted in winter.</p>
-      </div>
+        <span class="ulink">View uniform &rarr;</span>
+      </button>
     </div>
     <p style="margin-top:18px;color:var(--muted);font-size:14px;">The school badge, ID card and name-belt are part of the uniform — keeping simplicity and discipline at the heart of everyday school life.</p>
   </div>
 </section>
+
+<div class="modal" id="uniformModal" role="dialog" aria-modal="true" aria-label="School uniform" hidden>
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3 id="uniformTitle">Uniform</h3>
+      <button class="modal-x" id="uniformClose" aria-label="Close">&times;</button>
+    </div>
+    <img id="uniformImg" class="umodal-img" src="" alt="">
+    <p id="uniformDesc" class="umodal-desc"></p>
+  </div>
+</div>
 
 <section>
   <div class="wrap">
@@ -172,6 +185,32 @@ if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.se
   window.addEventListener('scroll', upd, {passive:true});
   window.addEventListener('resize', upd);
   upd();
+})();
+</script>
+<script>
+(function(){
+  var data = {
+    boys: {title: "Boys' Uniform", img: "images/uniform-boys.jpg", alt: "Boys' uniform: white shirt, navy-blue shorts, white socks, black shoes", desc: "White shirt with navy-blue shorts or long pants and black shoes. On Thursdays and Saturdays: all-white uniform with white shoes. A red sweater is permitted in winter."},
+    girls: {title: "Girls' Uniform", img: "images/uniform-girls.jpg", alt: "Girls' uniform: white blouse, navy-blue skirt, white dupatta, white socks, black shoes", desc: "Navy-blue skirt or salwar-kameez with white dupatta and black shoes. On Thursdays and Sundays: all-white salwar-kameez with dupatta and white shoes. A red sweater is permitted in winter."}
+  };
+  var modal = document.getElementById('uniformModal');
+  if(!modal) return;
+  var title = document.getElementById('uniformTitle'),
+      img = document.getElementById('uniformImg'),
+      desc = document.getElementById('uniformDesc'),
+      x = document.getElementById('uniformClose'), last = null;
+  function open(k){
+    var d = data[k];
+    title.textContent = d.title; img.src = d.img; img.alt = d.alt; desc.textContent = d.desc;
+    modal.hidden = false; document.body.style.overflow = 'hidden'; x.focus();
+  }
+  function close(){ modal.hidden = true; document.body.style.overflow = ''; if(last) last.focus(); }
+  document.querySelectorAll('.ucard').forEach(function(b){
+    b.addEventListener('click', function(){ last = b; open(b.getAttribute('data-uniform')); });
+  });
+  x.addEventListener('click', close);
+  modal.addEventListener('click', function(e){ if(e.target === modal) close(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && !modal.hidden) close(); });
 })();
 </script>
 </body>
