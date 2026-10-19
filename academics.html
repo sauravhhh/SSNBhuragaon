@@ -93,8 +93,8 @@
       <button class="modal-x" id="uniformClose" aria-label="Close">&times;</button>
     </div>
     <div class="uimg-wrap">
-      <img id="uniformImg" class="umodal-img" src="" alt="" hidden>
-      <div id="uBoysStack" class="uboys" hidden>
+      <img id="uniformImg" class="umodal-img" src="" alt="">
+      <div id="uBoysStack" class="uboys">
         <img class="uelem" src="images/u-shirt.png" alt="">
         <button class="uelem-btn" id="uPants" aria-label="Switch trousers"><img id="uPantsImg" src="images/u-pants-navy.png" alt=""></button>
         <img class="uelem" src="images/u-socks.png" alt="">
@@ -210,8 +210,8 @@ if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.se
   function open(k){
     var isBoys = (k === 'boys');
     title.textContent = isBoys ? "Boys' Uniform" : "Girls' Uniform";
-    img.hidden = isBoys;
-    stack.hidden = !isBoys;
+    img.style.display = isBoys ? 'none' : 'block';
+    stack.style.display = isBoys ? 'flex' : 'none';
     if(isBoys){
       uPantsImg.src = PANTS.navy;
       uShoesImg.src = SHOES.black;
