@@ -245,7 +245,7 @@ footer li{margin-bottom:7px;}
 .staff-list li{margin-bottom:10px;break-inside:avoid;}
 @media(max-width:560px){.staff-list{columns:1;}}
 
-.mcarousel{position:relative;overflow:hidden;background:#0f2547;touch-action:pan-y;margin-top:16px;}
+.mcarousel{position:relative;overflow:hidden;background:#0f2547;touch-action:pan-y;margin:16px 0 24px;}
 .mcarousel .mc-slides{position:relative;height:62.5vw;max-height:480px;}
 .mcarousel .mc-slide{position:absolute;inset:0;opacity:0;transition:opacity .7s ease;}
 .mcarousel .mc-slide.active{opacity:1;}
