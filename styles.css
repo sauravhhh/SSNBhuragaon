@@ -220,3 +220,9 @@ footer li{margin-bottom:7px;}
 .weblink:hover .warrow{transform:translateX(4px);color:var(--navy);}
 
 #scrollProgress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--gold);z-index:60;}
+
+.glimpses{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px;}
+.glimpses figure{margin:0;}
+.glimpses img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;display:block;box-shadow:0 6px 18px rgba(15,37,71,.12);}
+.glimpses figcaption{font-size:13px;color:var(--muted);margin-top:8px;text-align:center;}
+@media(max-width:640px){.glimpses{grid-template-columns:1fr;}}
