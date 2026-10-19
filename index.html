@@ -34,6 +34,17 @@
   </div>
 </header>
 
+<div class="hero-slider" id="heroSlider">
+  <div class="hslides">
+    <div class="hslide active"><img src="images/school-building.jpg" alt="The Niketan campus at Bhuragaon"></div>
+    <div class="hslide"><img src="images/gallery-1.jpg" alt="Flag-hoisting ceremony at the school"></div>
+    <div class="hslide"><img src="images/gallery-2.jpg" alt="Morning assembly around the flagpole"></div>
+  </div>
+  <button class="harrow hprev" aria-label="Previous photo">&#10094;</button>
+  <button class="harrow hnext" aria-label="Next photo">&#10095;</button>
+  <div class="hindicators"></div>
+</div>
+
 <div class="hero">
   <div class="as">শংকৰদেৱ শিশু নিকেতন, ভূৰাগাঁও</div>
   <h1>Shankardev Shishu Niketan, Bhuragaon</h1>
@@ -232,6 +243,34 @@ if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.se
   window.addEventListener('scroll', upd, {passive:true});
   window.addEventListener('resize', upd);
   upd();
+})();
+</script>
+<script>
+(function(){
+  var s = document.getElementById('heroSlider');
+  if(!s) return;
+  var slides = s.querySelectorAll('.hslide');
+  var box = s.querySelector('.hindicators');
+  var cur = 0, timer = null, n = slides.length;
+  slides.forEach(function(_, i){
+    var b = document.createElement('button');
+    b.className = 'hind' + (i === 0 ? ' active' : '');
+    b.setAttribute('aria-label', 'Go to photo ' + (i + 1));
+    b.addEventListener('click', function(){ go(i); restart(); });
+    box.appendChild(b);
+  });
+  var inds = box.querySelectorAll('.hind');
+  function go(i){
+    slides[cur].classList.remove('active');
+    inds[cur].classList.remove('active');
+    cur = (i + n) % n;
+    slides[cur].classList.add('active');
+    inds[cur].classList.add('active');
+  }
+  function restart(){ clearInterval(timer); timer = setInterval(function(){ go(cur + 1); }, 5000); }
+  s.querySelector('.hprev').addEventListener('click', function(){ go(cur - 1); restart(); });
+  s.querySelector('.hnext').addEventListener('click', function(){ go(cur + 1); restart(); });
+  restart();
 })();
 </script>
 </body>
