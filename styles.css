@@ -225,8 +225,6 @@ footer li{margin-bottom:7px;}
 .glimpses figure{margin:0;}
 .glimpses img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;display:block;box-shadow:0 6px 18px rgba(15,37,71,.12);}
 .glimpses figcaption{font-size:13px;color:var(--muted);margin-top:8px;text-align:center;}
-.penicon{display:inline-flex;vertical-align:-7px;margin-right:10px;color:var(--navy);}
-
 .staff-box{display:flex;align-items:center;gap:16px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;cursor:pointer;margin-top:18px;font:inherit;color:inherit;}
 .staff-box:hover{border-color:var(--gold);}
 .staff-count{width:52px;height:52px;flex:0 0 52px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;}
