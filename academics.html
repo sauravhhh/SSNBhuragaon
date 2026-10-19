@@ -160,5 +160,19 @@ nav.querySelectorAll("a").forEach(function(a){a.addEventListener("click",functio
 <script>
 if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}
 </script>
+<div id="scrollProgress"></div>
+<script>
+(function(){
+  var bar = document.getElementById('scrollProgress');
+  function upd(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+  }
+  window.addEventListener('scroll', upd, {passive:true});
+  window.addEventListener('resize', upd);
+  upd();
+})();
+</script>
 </body>
 </html>
