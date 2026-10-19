@@ -74,6 +74,55 @@
   </div>
 </section>
 
+<section>
+  <div class="wrap">
+    <div class="kicker">Teaching Staff</div>
+    <h2 class="stitle">Our Acharyas</h2>
+    <p class="lede">Twenty-five dedicated acharyas guide our students every single day.</p>
+    <button class="staff-box" id="staffBox" aria-haspopup="dialog">
+      <span class="staff-count">25</span>
+      <span class="staff-text"><b>Meet our Acharyas</b><small>Tap to see the full list</small></span>
+      <span class="warrow" aria-hidden="true">&rarr;</span>
+    </button>
+  </div>
+</section>
+
+<div class="modal" id="staffModal" role="dialog" aria-modal="true" aria-label="Our Acharyas" hidden>
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3>Our Acharyas <span class="as">আচাৰ্যসকল</span></h3>
+      <button class="modal-x" id="staffClose" aria-label="Close">&times;</button>
+    </div>
+    <ol class="staff-list">
+      <li>Shri Dipankar Das</li>
+      <li>Shri Rupam Bora</li>
+      <li>Smt. Priyanka Baruah</li>
+      <li>Shri Jiten Deka</li>
+      <li>Smt. Gitanjali Das</li>
+      <li>Shri Manash Kalita</li>
+      <li>Smt. Mamoni Saikia</li>
+      <li>Shri Bhaskar Hazarika</li>
+      <li>Smt. Runjun Bora</li>
+      <li>Shri Partha Sarmah</li>
+      <li>Smt. Parishmita Deka</li>
+      <li>Shri Nayan Barman</li>
+      <li>Smt. Bornali Kalita</li>
+      <li>Shri Kuldeep Nath</li>
+      <li>Smt. Jyotirmoyee Hazarika</li>
+      <li>Shri Sanjib Medhi</li>
+      <li>Smt. Chandana Sarmah</li>
+      <li>Shri Diganta Talukdar</li>
+      <li>Smt. Rima Barman</li>
+      <li>Shri Rituraj Choudhury</li>
+      <li>Smt. Karabi Nath</li>
+      <li>Shri Abhijit Kakati</li>
+      <li>Shri Mrinal Dutta</li>
+      <li>Smt. Pallabi Phukan</li>
+      <li>Shri Debajit Gogoi</li>
+    </ol>
+  </div>
+</div>
+
 <section class="alt">
   <div class="wrap">
     <div class="kicker">Media</div>
@@ -191,6 +240,20 @@ if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.se
   window.addEventListener('scroll', upd, {passive:true});
   window.addEventListener('resize', upd);
   upd();
+})();
+</script>
+<script>
+(function(){
+  var box = document.getElementById('staffBox');
+  if(!box) return;
+  var modal = document.getElementById('staffModal');
+  var x = document.getElementById('staffClose');
+  function open(){ modal.hidden = false; document.body.style.overflow = 'hidden'; x.focus(); }
+  function close(){ modal.hidden = true; document.body.style.overflow = ''; box.focus(); }
+  box.addEventListener('click', open);
+  x.addEventListener('click', close);
+  modal.addEventListener('click', function(e){ if(e.target === modal) close(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && !modal.hidden) close(); });
 })();
 </script>
 </body>
