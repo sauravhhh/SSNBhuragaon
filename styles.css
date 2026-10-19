@@ -225,4 +225,5 @@ footer li{margin-bottom:7px;}
 .glimpses figure{margin:0;}
 .glimpses img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;display:block;box-shadow:0 6px 18px rgba(15,37,71,.12);}
 .glimpses figcaption{font-size:13px;color:var(--muted);margin-top:8px;text-align:center;}
+.penicon{display:inline-flex;vertical-align:-7px;margin-right:10px;color:var(--navy);}
 @media(max-width:640px){.glimpses{grid-template-columns:1fr;}}
